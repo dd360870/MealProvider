@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div style="min-height:20vh;">
+</div>
+<div>
+  <form method="post" class="m-auto border border-dark-subtle rounded p-3" style="max-width:30rem">
+    <div>
+      <h2>註冊帳號</h2>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="username">Username</label>
+      <input type="text" class="form-control" name="username" id="username" placeholder="" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="password">Password</label>
+      <input type="password" class="form-control" name="password" id="password" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="password_confirm">Password Confirm</label>
+      <input type="password" class="form-control" name="password_confirm" id="password_confirm" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+    <a class="mx-2" href="{{ url_for('auth.login') }}">登入</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% for restaurant in restaurants %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ restaurant.name }}</h1>
+          <a href="{{ url_for('restaurant.index', id=restaurant.id) }}">menu</a>
+        </div>
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

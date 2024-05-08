@@ -1,0 +1,16 @@
+services:
+  app:
+    image: python
+    volumes:
+      - ./:/app
+    environment:
+      - FLASK_APP=flaskr
+  db:
+    image: mariadb
+    #volumes:
+    #  - ./flaskr/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_USER=nol
+      - MARIADB_PASSWORD=nol
+      - MARIADB_DATABASE=meal_provider

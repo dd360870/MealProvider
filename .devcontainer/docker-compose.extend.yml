@@ -1,0 +1,6 @@
+services:
+  app:
+    build:
+      dockerfile: .devcontainer/Dockerfile
+      context: .
+    tty: true

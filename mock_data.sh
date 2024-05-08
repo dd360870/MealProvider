@@ -1,0 +1,1 @@
+mariadb -h db -u nol -pnol meal_provider < data.sql
