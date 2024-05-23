@@ -10,7 +10,11 @@ bp = Blueprint('home', __name__)
 
 @bp.route('/')
 def index():
-    restaurants = Restaurant.getAll()
+    tag = request.args.get('tag')
+    if tag:
+        restaurants = Restaurant.getByTag(tag)
+    else:
+        restaurants = Restaurant.getAll()
     return render_template('home/index.html', restaurants=restaurants)
 
 #@bp.route('/create', methods=('GET', 'POST'))

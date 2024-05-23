@@ -7,3 +7,7 @@ def getAll():
 def getById(id) -> Restaurant | None:
     query = db.select(Restaurant).where(Restaurant.id == id)
     return db.session.execute(query).scalar_one_or_none()
+
+def getByTag(tag: str):
+    query = db.select(Restaurant).where(Restaurant.tag == tag)
+    return db.session.execute(query).scalars()
