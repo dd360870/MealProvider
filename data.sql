@@ -20,5 +20,5 @@ INSERT IGNORE INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`
     (14, "燒魚頭便當", "以魚頭為主，經過特殊的調味和烹飪方式，肉質鮮嫩可口。", 75, 2),
     (15, "燒雞翅便當", "嫩滑多汁的雞翅肉，烤製至外酥內嫩，美味可口。", 80, 2);
 
-INSERT IGNORE INTO `user` (`username`, `password`) VALUES
-    ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4");
+INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`) VALUES
+    ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 1);

@@ -36,7 +36,8 @@ def create_app(test_config=None):
     with app.app_context():
         db.create_all()
 
-    from .view import auth, home, restaurant
+    from .view import auth, home, restaurant, admin
+    app.register_blueprint(admin.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(home.bp)
     app.register_blueprint(restaurant.bp)
