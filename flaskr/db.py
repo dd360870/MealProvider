@@ -17,7 +17,7 @@ class User(db.Model):
     username: Mapped[str] = mapped_column(String(255), unique=True)
     password: Mapped[str] = mapped_column(String(255))
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=True)
-    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     orders = relationship("Order", backref="user")
 

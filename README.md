@@ -19,3 +19,8 @@
 
 4. visit
     http://localhost:5000
+
+## Utilities
+
+* 重置資料庫 (如果db欄位有更動的話，要重新建立)
+    `flask db init`

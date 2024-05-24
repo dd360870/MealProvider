@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, current_app
+from flaskr.commands import register_cli
 
 def create_app(test_config=None):
     # create and configure the app
@@ -35,6 +36,8 @@ def create_app(test_config=None):
     # init table
     with app.app_context():
         db.create_all()
+
+        register_cli(app)
 
     from .view import auth, home, restaurant, admin
     app.register_blueprint(admin.bp)
