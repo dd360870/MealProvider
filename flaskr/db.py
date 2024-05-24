@@ -20,6 +20,7 @@ class User(db.Model):
     is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     orders = relationship("Order", backref="user")
+    reviews = relationship("MealReview", backref="user")
 
 class Restaurant(db.Model):
     __tablename__ = "restaurant"
@@ -50,6 +51,7 @@ class MealReview(db.Model):
     content: Mapped[str] = mapped_column(String(1024), nullable=True)
     stars: Mapped[int] = mapped_column(SmallInteger)
     meal_id = mapped_column(Integer, ForeignKey("meal.id"))
+    user_id = mapped_column(Integer, ForeignKey("user.id"))
 
 class Order(db.Model):
     __tablename__ = "order"
@@ -70,3 +72,5 @@ class OrderItem(db.Model):
     count: Mapped[int] = mapped_column(Integer)
     price: Mapped[int] = mapped_column(Integer)
     order_id = mapped_column(Integer, ForeignKey("order.id"))
+
+    meal = relationship("Meal")

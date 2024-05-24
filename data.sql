@@ -22,3 +22,13 @@ INSERT IGNORE INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`
 
 INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`) VALUES
     ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 1);
+
+INSERT IGNORE INTO `order` (`id`, `timestamp`, `user_id`, `total_price`) VALUES
+    (1, "2024-05-24 23:31:03", 1, 180),
+    (2, "2024-05-24 23:33:15", 1, 210+65*7);
+
+INSERT IGNORE INTO `order_item` (`id`, `meal_id`, `count`, `price`, `order_id`) VALUES
+    (1, 1, 2, 100, 1),
+    (2, 10, 1, 80, 1),
+    (3, 13, 3, 210, 2),
+    (4, 7, 7, 65*7, 2);

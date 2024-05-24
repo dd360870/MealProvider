@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from flaskr.model import Restaurant
+from flaskr.model import Restaurant, Order
 from flaskr.view.auth import login_required
 
 bp = Blueprint('home', __name__)
@@ -12,6 +12,12 @@ bp = Blueprint('home', __name__)
 def index():
     restaurants = Restaurant.getAll()
     return render_template('home/index.html', restaurants=restaurants)
+
+@bp.route('/order')
+@login_required
+def order():
+    orders = Order.getHistory(g.user.id)
+    return render_template('home/order.html', orders=orders)
 
 #@bp.route('/create', methods=('GET', 'POST'))
 #@login_required
