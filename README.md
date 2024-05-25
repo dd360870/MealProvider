@@ -14,7 +14,7 @@
     在 vscode 的 terminal 執行
 
     ```
-    ./mock_data.sh
+    flask db add_mock
     ```
 
 4. visit
