@@ -10,6 +10,9 @@ services:
       - MARIADB_USER=nol
       - MARIADB_PASSWORD=nol
       - MARIADB_DATABASE=meal_provider
+    volumes:
+      - database:/var/lib/mysql
+
     healthcheck:
       test:
         [
@@ -24,3 +27,5 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
+volumes:
+  database:
