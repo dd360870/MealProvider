@@ -16,7 +16,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            {% set menu = [('index', '餐廳列表'), ('home.order', "點餐紀錄")] %}
+            {% set menu = [('index', '餐廳列表'), ('home.orders', "點餐紀錄")] %}
 
             {% for m in menu %}
               {% set active = 'active' if (request.path == url_for(m[0])) else '' %}

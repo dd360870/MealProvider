@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}點餐紀錄{% endblock %}
 {% block content %}
+<div class="row">
+  <div class="col-3">
+    <div class="list-group m-3">
+  {% for m in months %}
+    {% set active = 'active' if arg_year == m.year and arg_month == m.month else '' %}
+      <a href="{{ url_for('home.orders', datestr=m.year ~ '-' ~ m.month) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start {{ active }}">
+        {{ m.year }}/{{ '%02d' | format(m.month) }} <span class="badge text-bg-secondary rounded-pill">{{ m.count }}</span>
+      </a>
+  {% endfor %}
+    </div>
+  </div>
+<div class="col-9">
   {% for o in orders %}
 <div class="card m-3">
   <div class="card-body">
@@ -8,28 +20,33 @@
     <table class="table table-sm">
       <thead>
         <tr>
-          <th>品項</th>
-          <th>數量</th>
-          <th>金額</th>
+          <th style="width:55%">品項</th>
+          <th class="text-end" style="width:15%">單價</th>
+          <th class="text-end" style="width:15%">數量</th>
+          <th class="text-end" style="width:15%">金額</th>
         </tr>
       </thead>
       <tbody>
     {% for item in o.items %}
         <tr>
           <td>{{ item.meal.name }}</td>
-          <td>{{ item.count }}</td>
-          <td>{{ item.price }}</td>
+          <td class="text-end">{{ item.price }}</td>
+          <td class="text-end">{{ item.count }}</td>
+          <td class="text-end">{{ item.count * item.price }}</td>
         </tr>
     {% endfor %}
       </tbody>
       <tfoot>
         <tr>
           <th colspan="2">總計</th>
-          <td>{{ o.total_price }}</td>
+          <td class="text-end">{{ o.items | sum(attribute='count') }}</td>
+          <td class="text-end">{{ o.total_price }}</td>
         </tr>
       </tfoot>
     </table>
   </div>
 </div>
   {% endfor %}
+</div>
+</div>
 {% endblock %}

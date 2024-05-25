@@ -4,8 +4,8 @@ from flaskr.db import db
 import flaskr.db as orm
 
 def random_datetime():
-    # 範圍：一年前到今天
-    sdate = datetime.now()-timedelta(days=365)
+    # 範圍：兩年前到今天
+    sdate = datetime.now()-timedelta(days=365*2)
     random_ts = random.randint(round(sdate.timestamp()), round(datetime.now().timestamp()))
     random_dt = datetime.fromtimestamp(random_ts).strftime("%Y-%m-%d %H:%M:%S")
     return random_dt
