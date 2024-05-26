@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} - Meal Provider Pos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #bdf3ea;">
+      <div class="container-fluid container-md">
+        <a class="navbar-brand" href="{{ url_for('clerk.index', id=g.user.restaurant_id) }}">Meal Provider Clerk</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('clerk.register_customer')}}">新增訂單</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">取消訂單</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+{% if g.user %}
+            <span class="navbar-text mx-2">{{ g.user['username'] }}</span>
+            {% if g.user.is_clerk %}
+                <a class="btn btn-primary mx-2" href="{{ url_for('clerk.index', id=g.user.restaurant_id) }}">回首頁</a>
+            {% else %}
+                <a class="btn btn-primary mx-2" href="{{ url_for('index') }}">回首頁</a>
+            {% endif %}
+            <a class="btn btn-secondary" href="{{ url_for('auth.logout') }}">登出</a>
+{% else %}
+            <a class="btn btn-secondary" href="{{ url_for('auth.login') }}">登入</a>
+{% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-md">
+      <section class="content">
+        {% for message in get_flashed_messages() %}
+          <div class="alert alert-danger m-1" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+      </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

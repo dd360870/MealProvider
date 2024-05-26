@@ -18,7 +18,10 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(String(255))
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_clerk: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    restaurant_id = mapped_column(Integer, ForeignKey('restaurant.id'), nullable=True)
 
+    restaurant = relationship("Restaurant")
     orders = relationship("Order", backref="user")
 
 class Restaurant(db.Model):
@@ -59,6 +62,7 @@ class Order(db.Model):
     user_id = mapped_column(Integer, ForeignKey("user.id"))
     total_price: Mapped[int] = mapped_column(Integer)
     paid: Mapped[bool] = mapped_column(Boolean)
+    restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"))
 
     items = relationship("OrderItem", backref="order")
 
@@ -70,3 +74,5 @@ class OrderItem(db.Model):
     count: Mapped[int] = mapped_column(Integer)
     price: Mapped[int] = mapped_column(Integer)
     order_id = mapped_column(Integer, ForeignKey("order.id"))
+
+    meal = relationship("Meal")

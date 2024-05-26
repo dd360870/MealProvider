@@ -39,11 +39,12 @@ def create_app(test_config=None):
 
         register_cli(app)
 
-    from .view import auth, home, restaurant, admin
+    from .view import auth, home, restaurant, admin, clerk
     app.register_blueprint(admin.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(home.bp)
     app.register_blueprint(restaurant.bp)
+    app.register_blueprint(clerk.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

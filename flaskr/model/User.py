@@ -37,3 +37,6 @@ def validate(username, password) -> User|None:
 def getById(id) -> User|None:
     query = db.select(User).where(User.id == id)
     return db.session.execute(query).scalar_one_or_none()
+
+def validate_customer_id(customer_id) -> User|None:
+    return getById(customer_id)
