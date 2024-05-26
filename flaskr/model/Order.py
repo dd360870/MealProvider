@@ -1,4 +1,24 @@
+from sqlalchemy import func, desc, extract, select
 from flaskr.db import db, Order, OrderItem
+from datetime import datetime, timedelta
+import calendar
+
+def get_bill():
+
+    today = datetime.now()
+    last_month_end = datetime(today.year, today.month, 1, 0, 0, 0) - timedelta(days=1)
+
+    return Order.query.with_entities(
+                Order.user_id,
+                func.sum(Order.total_price).label('total_price'),
+                extract('year', Order.timestamp).label('year'),
+                extract('month', Order.timestamp).label('month')
+            )\
+            .filter(Order.timestamp < last_month_end)\
+            .filter(Order.paid == False)\
+            .group_by(Order.user_id, extract('year', Order.timestamp), extract('month', Order.timestamp))\
+            .order_by(desc('year'), desc('month'))\
+            .all()
 
 def add_order(user_id, total_price, restaurant_id) -> Order:
     new_order = Order(
@@ -11,6 +31,7 @@ def add_order(user_id, total_price, restaurant_id) -> Order:
     db.session.commit()
 
     return new_order
+
 def create_order_items(order_id, order_details) -> None:
     for item in order_details:
         new_order_item = OrderItem(
@@ -21,6 +42,7 @@ def create_order_items(order_id, order_details) -> None:
         )
         db.session.add(new_order_item)
     db.session.commit()
+
 def getAll() -> None:
     query = db.select(Order)
     return db.session.execute(query).scalars()

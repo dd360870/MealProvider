@@ -61,7 +61,7 @@ class Order(db.Model):
     timestamp: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     user_id = mapped_column(Integer, ForeignKey("user.id"))
     total_price: Mapped[int] = mapped_column(Integer)
-    paid: Mapped[bool] = mapped_column(Boolean)
+    paid: Mapped[bool] = mapped_column(Boolean, default=False)
     restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"))
 
     items = relationship("OrderItem", backref=backref("order", cascade="all, delete-orphan", single_parent=True))
