@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import SmallInteger, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.sql import func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, backref
 
 class Base(DeclarativeBase):
   pass
@@ -64,7 +64,7 @@ class Order(db.Model):
     paid: Mapped[bool] = mapped_column(Boolean)
     restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"))
 
-    items = relationship("OrderItem", backref="order")
+    items = relationship("OrderItem", backref=backref("order", cascade="all, delete-orphan", single_parent=True))
 
 class OrderItem(db.Model):
     __tablename__ = "order_item"

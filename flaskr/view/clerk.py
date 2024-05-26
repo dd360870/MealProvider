@@ -52,3 +52,12 @@ def confirm_order():
         order = Order.add_order(user_id = session.get('customer_id'), total_price=total_price, restaurant_id=restaurant_id)
         Order.create_order_items(order.id, order_details)
         return render_template('clerk/finish_order.html', customer=validate_customer_id(session.get('customer_id')), total_price = total_price, order_item = order.items)
+    
+@bp.route('/cancel_orders/', methods=('GET', 'POST'))
+def show_order():
+    return render_template('clerk/cancel_order.html', orders=Order.getAll())
+@bp.route('/redirect_to_cancel_orders/', methods=('GET', 'POST'))
+def cancel_orders():
+    cancelled_orders = request.form.getlist('cancel_orders[]')
+    Order.delete_orders(cancelled_orders)
+    return redirect(url_for('clerk.show_order'))

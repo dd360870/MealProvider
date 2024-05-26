@@ -7,7 +7,7 @@
     <form action="{{ url_for('clerk.register_customer') }}" method="POST">
         <label for="customer_id">員工編號：</label>
         <input type="text" id="customer_id" name="customer_id">
-        <button type="submit">確認</button>
+        <button class="btn btn-primary mx-2" type="submit">確認</button>
     </form>
     {% if customer_data %}
         <p>Welcome, {{ customer_data.username }}</p>
