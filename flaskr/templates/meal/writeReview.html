@@ -32,9 +32,9 @@
     .rating {
       border: none;
       float: left;
-      position: absolute;
-      top: 17%;
-      left: 38%;
+      position: relative;
+      top: 10%;
+      left: 41%;
     }
     
     .rating > label {
@@ -70,47 +70,36 @@
   </style>
   <br>
   <center><h1>{{ meal.name }}</h1>
-    <p>Please rate the meal</p>
-    <!-- <div class="content">
-      <span><i class="fa fa-star"></i></span>
-    </div> -->
-    <!-- <span class="star-cb-group">
-      <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
-      <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
-      <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
-      <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
-      <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
-      <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
-    </span> -->
-      <div class="rating">
-        <input type="radio" id="star5" name="rating" value="5" />
-        <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
-        <input type="radio" id="star4" name="rating" value="4" />
-        <label class="star" for="star4" title="Great" aria-hidden="true"></label>
-        <input type="radio" id="star3" name="rating" value="3" />
-        <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
-        <input type="radio" id="star2" name="rating" value="2" />
-        <label class="star" for="star2" title="Good" aria-hidden="true"></label>
-        <input type="radio" id="star1" name="rating" value="1" />
-        <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
-      </div>
     <br>
+    <form method="post">
+    <p>評分</p>
+    <div class="rating">
+      <input type="radio" id="star5" name="rating" value="5" />
+      <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
+      <input type="radio" id="star4" name="rating" value="4" />
+      <label class="star" for="star4" title="Great" aria-hidden="true"></label>
+      <input type="radio" id="star3" name="rating" value="3" />
+      <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
+      <input type="radio" id="star2" name="rating" value="2" />
+      <label class="star" for="star2" title="Good" aria-hidden="true"></label>
+      <input type="radio" id="star1" name="rating" value="1" />
+      <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+    </div>
+    <br><br><br><br><br>
+    <p>評論</p>
+    <textarea id="userInput" class="textarea-large" name="content" placeholder="詳細說明您的意見"></textarea>
     <br>
-    <br>
-    <p>Please write your comment</p>
-    <textarea id="userInput" class="textarea-large" placeholder="Insert your text here"></textarea>
-    <br>
-    <button class="submit-button" onclick="displayRadioValue()">Submit</button>
-
+    <button type="submit" class="submit-button" onclick="displayRadioValue()">提交</button>
+    </form>
     <p id="result"></p>
     </center>
     <script>
       function displayRadioValue() {
           var ele = document.getElementsByName('rating');
+          var result;
           for (i = 0; i < ele.length; i++) {
               if (ele[i].checked)
-                  document.getElementById("result").innerHTML
-                      = "star: " + ele[i].value;
+                result = ele[i].value;
           }
       }
     </script>
