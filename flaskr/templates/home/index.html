@@ -1,48 +1,70 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <br>
-  <form method="get" action="{{ url_for('home.index')}}">
-    <!-- <label style="font-size: 25px;">篩選標籤：</label><br> -->
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="all" name="tag" value="" {% if not request.args.get('tag') %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="all" style="font-size: 25px;">所有</label>
+
+<style>
+  .form-check-input {
+    vertical-align: middle;
+  }
+  .form-check-label {
+    display: inline-block; 
+    vertical-align: middle;
+    margin-bottom: 0;
+  }
+  .menu-button {
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: #acadb0;
+    border-color: #000000;
+    width: 100px;
+    height: 35px;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px;
+  }
+  .menu-button:hover {
+    background-color: #616162;
+    border-color: #000000;
+  }
+</style>
+
+<div class="container mt-4">
+  <form method="get" action="{{ url_for('home.index') }}" class="mb-4">
+    <label style="font-size: 20px;">餐廳類別：</label><br>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="chinese" name="tag" value="中式" {% if '中式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <label class="form-check-label" for="chinese" style="font-size: 20px;">中式</label>
     </div>
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="中式" name="tag" value="中式" {% if request.args.get('tag') == '中式' %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="中式" style="font-size: 25px;">中式</label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="western" name="tag" value="西式" {% if '西式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <label class="form-check-label" for="western" style="font-size: 20px;">西式</label>
     </div>
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="西式" name="tag" value="西式" {% if request.args.get('tag') == '西式' %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="西式" style="font-size: 25px;">西式</label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="japanese" name="tag" value="日式" {% if '日式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <label class="form-check-label" for="japanese" style="font-size: 20px;">日式</label>
     </div>
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="日式" name="tag" value="日式" {% if request.args.get('tag') == '日式' %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="日式" style="font-size: 25px;">日式</label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="beverages" name="tag" value="飲料" {% if '飲料' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <label class="form-check-label" for="beverages" style="font-size: 20px;">飲料</label>
     </div>
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="飲料" name="tag" value="飲料" {% if request.args.get('tag') == '飲料' %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="飲料" style="font-size: 25px;">飲料</label>
-    </div>
-    <div style="display: inline-block; margin-right: 20px;">
-      <input type="radio" id="甜點" name="tag" value="甜點" {% if request.args.get('tag') == '甜點' %}checked{% endif %} onchange="this.form.submit()" style="transform: scale(1.5);">
-      <label for="甜點" style="font-size: 25px;">甜點</label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="checkbox" id="dessert" name="tag" value="甜點" {% if '甜點' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <label class="form-check-label" for="dessert" style="font-size: 20px;">甜點</label>
     </div>
   </form>
-  <hr>
+
   {% for restaurant in restaurants %}
-    <article class="post">
-      <header>
+    <div class="card mb-4">
+      <div class="card-body">
         <div>
-          <h1>{{ restaurant.name }}</h1>
-          <a href="{{ url_for('restaurant.index', id=restaurant.id) }}">
-            <button style="border-radius: 8px;">menu</button>
-          </a>
+          <h2 class="d-inline">{{ restaurant.name }}</h2>
+          <span class="badge badge bg-light text-dark ms-2">{{ restaurant.tag }}</span>
         </div>
-      </header>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
+        <a href="{{ url_for('restaurant.index', id=restaurant.id) }}" class="btn menu-button mt-2">Menu</a>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-center">No restaurants available</p>
   {% endfor %}
+</div>
 {% endblock %}
