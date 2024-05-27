@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealprovider-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealprovider-web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: mealprovider-web
+    spec:
+      containers:
+        - name: web-container
+          image: ghcr.io/dd360870/mealprovider-web:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+          env:
+            - name: DB_HOST
+              value: mealprovider-db-clusterip
+            - name: DEBUG
+              value: "1"
+            - name: FLASK_APP
+              value: flaskr
+      imagePullSecrets:
+        - name: ghcr-login-secret
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealprovider-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealprovider-db
+  template:
+    metadata:
+      labels:
+        app: mealprovider-db
+    spec:
+      containers:
+        - name: mealprovider-db
+          image: docker.io/library/mariadb:latest
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mariadb-persistent-storage
+              mountPath: /var/lib/mysql
+          env:
+            - name: MARIADB_ALLOW_EMPTY_ROOT_PASSWORD
+              value: "1"
+            - name: MARIADB_USER
+              value: nol
+            - name: MARIADB_PASSWORD
+              value: nol
+            - name: MARIADB_DATABASE
+              value: meal_provider
+      volumes:
+        - name: mariadb-persistent-storage
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

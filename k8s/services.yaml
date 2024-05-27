@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mealprovider-web-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: mealprovider-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mealprovider-db-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: mealprovider-db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
