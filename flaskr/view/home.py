@@ -1,9 +1,11 @@
+from datetime import date, datetime, timedelta
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 
-from flaskr.model import Restaurant
+from flaskr.model import Restaurant, Order
 from flaskr.view.auth import login_required
 
 bp = Blueprint('home', __name__)
@@ -12,6 +14,34 @@ bp = Blueprint('home', __name__)
 def index():
     restaurants = Restaurant.getAll()
     return render_template('home/index.html', restaurants=restaurants)
+
+@bp.route('/orders')
+@login_required
+def orders(datestr=None):
+    datestr = request.args.get('datestr')
+
+    arg_year = date.today().year
+    arg_month = date.today().month
+
+    if datestr is not None:
+        try:
+            t = datetime.strptime(datestr, "%Y-%m")
+            arg_year = t.year
+            arg_month = t.month
+        finally:
+            pass
+
+    orders = Order.getHistory(g.user.id, arg_year, arg_month)
+    months = Order.getGroupByMonth(g.user.id)
+
+    context = {
+        'orders': orders,
+        'months': months,
+        'arg_year': arg_year,
+        'arg_month': arg_month,
+    }
+
+    return render_template('home/order.html', **context)
 
 #@bp.route('/create', methods=('GET', 'POST'))
 #@login_required

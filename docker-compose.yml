@@ -1,16 +1,36 @@
 services:
   app:
-    image: python
-    volumes:
-      - ./:/app
+    build: .
+    image: ghcr.io/dd360870/mealprovider-web:latest
+    ports:
+      - 8000:8000
     environment:
+      - DB_HOST=db
+      - DEBUG=1
       - FLASK_APP=flaskr
   db:
     image: mariadb
-    #volumes:
-    #  - ./flaskr/schema.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
       - MARIADB_USER=nol
       - MARIADB_PASSWORD=nol
       - MARIADB_DATABASE=meal_provider
+    volumes:
+      - database:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 10s
+      retries: 3
+volumes:
+  database:

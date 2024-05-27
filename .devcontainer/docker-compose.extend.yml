@@ -4,3 +4,7 @@ services:
       dockerfile: .devcontainer/Dockerfile
       context: .
     tty: true
+    volumes:
+      - ./:/app
+    environment:
+      - FLASK_APP=flaskr
