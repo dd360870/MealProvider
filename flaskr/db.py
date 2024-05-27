@@ -50,7 +50,6 @@ class MealReview(db.Model):
     __tablename__ = "meal_review"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(255), nullable=True)
     content: Mapped[str] = mapped_column(String(1024), nullable=True)
     stars: Mapped[int] = mapped_column(SmallInteger, nullable=False)
     meal_id = mapped_column(Integer, ForeignKey("meal.id"), nullable=False)

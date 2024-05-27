@@ -29,7 +29,7 @@
       <tbody>
     {% for item in o.items %}
         <tr>
-          <td>{{ item.meal.name }}</td>
+          <td>{{ item.meal.name }} | <a href="{{ url_for('meal.writeReview', id=item.meal.id) }}">撰寫評論</a></td>
           <td class="text-end">{{ item.price }}</td>
           <td class="text-end">{{ item.count }}</td>
           <td class="text-end">{{ item.count * item.price }}</td>

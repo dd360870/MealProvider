@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .content  i {
+      color: #FFC107;
+    }
+    .list-group-item {
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .list-group-item:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+    }
+  </style>
+  <br>
+  <center><h1>{{ meal.name }}</h1></center>
+  <div class="list-group">
+  {% for review in reviews %}
+    <div class="list-group-item">
+    <p>{{ review.stars }} <i class="fa fa-star"></i></p>
+    <p>{{ review.content }}</p>
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}

@@ -49,7 +49,7 @@
             {% else %}
               尚未有評價
             {% endif %}
-            | 銷售數量：{{ meal.sales }}
+            | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
           </small>
         </div>
       {% endfor %}
@@ -58,5 +58,4 @@
     <p class="text-center">No meals available</p>
   {% endif %}
 </div>
-
 {% endblock %}
