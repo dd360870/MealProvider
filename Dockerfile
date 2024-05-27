@@ -5,14 +5,20 @@ ARG PIP_ROOT_USER_ACTION=ignore
 
 RUN apt update && apt install -y mariadb-client
 
-COPY . /app
-
-WORKDIR /app
-
-RUN pip install -e .
-
 RUN useradd -ms /bin/bash nol
 
 USER nol
 
-CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0 -w 4 'flaskr:create_app()'" ]
+WORKDIR /app
+
+COPY ./pyproject.toml ./pyproject.toml
+COPY ./flaskr ./flaskr
+COPY ./data.sql ./data.sql
+
+USER root
+RUN pip install -e .
+
+USER nol
+
+#CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0:8000 -w 4 'flaskr:create_app()'" ]
+CMD [ "/bin/bash", "-c", "flask --app flaskr run --host 0.0.0.0 --port 8000" ]

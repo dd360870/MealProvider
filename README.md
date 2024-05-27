@@ -4,20 +4,26 @@
 
 1. 使用 vscode開 devcontainer 起來
 
-2. Run dev server
+2. database init
 
-    ```
-    flask run --debug
+    ```sh
+    flask db init
     ```
 
 3. 塞一些假資料
     在 vscode 的 terminal 執行
 
-    ```
+    ```sh
     flask db add_mock
     ```
 
-4. visit
+4. Run dev server
+
+    ```sh
+    flask run
+    ```
+
+5. visit
     http://localhost:5000
 
 ## Utilities

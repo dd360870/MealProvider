@@ -1,8 +1,13 @@
 services:
   app:
     build: .
+    image: ghcr.io/dd360870/mealprovider-web:latest
     ports:
       - 8000:8000
+    environment:
+      - DB_HOST=db
+      - DEBUG=1
+      - FLASK_APP=flaskr
   db:
     image: mariadb
     environment:
