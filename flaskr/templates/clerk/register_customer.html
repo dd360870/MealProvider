@@ -7,10 +7,34 @@
     <form action="{{ url_for('clerk.register_customer') }}" method="POST">
         <label for="customer_id">員工編號：</label>
         <input type="text" id="customer_id" name="customer_id">
-        <button class="btn btn-primary mx-2" type="submit">確認</button>
+        <button class="btn btn-primary mx-2" type="submit">輸入框確認</button>
     </form>
     {% if customer_data %}
         <p>Welcome, {{ customer_data.username }}</p>
         <a class="btn btn-success mx-2" href="{{ url_for('clerk.new_order') }}">下一步</a>
     {% endif %} 
+    <div id="reader" style="width:300px;"></div>
+    <form id="myForm" action="{{ url_for('clerk.process_qr') }}" method="POST">
+        <input type="text" id="qrResult" name="qrResult" hidden>
+        <button class="btn btn-primary mx-2" type="submit" style="display: none;">Submit</button>
+    </form>
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            // 把掃描結果填入表單並提交
+            document.getElementById('qrResult').value = decodedText;
+            document.getElementById('myForm').submit();
+
+            // 停止 QR Code 偵測
+            html5QrcodeScanner.clear().then(() => {
+                console.log("QR Code scanning stopped.");
+            }).catch((error) => {
+                console.error("Failed to clear QR Code scanner. Reason: ", error);
+            });
+        }
+
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
 {% endblock %}

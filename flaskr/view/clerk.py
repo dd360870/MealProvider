@@ -20,6 +20,15 @@ def register_customer():
         session['customer_id'] = customer_data.id
     return render_template('clerk/register_customer.html', customer_data=customer_data)
 
+@bp.route('/process_qr/', methods=('GET', 'POST'))
+def process_qr():
+    customer_data = None
+    qr_result = request.form['qrResult']
+    if qr_result:
+        customer_data = validate_customer_id(int(qr_result))
+        session['customer_id'] = customer_data.id
+    return render_template('clerk/register_customer.html', customer_data=customer_data)
+
 from flaskr.model import Order, Meal
 @bp.route('/new_order/', methods=('GET', 'POST'))
 def new_order():
