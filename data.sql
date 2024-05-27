@@ -1,5 +1,5 @@
 # restaurant
-INSERT IGNORE INTO `restaurant` (`id`, `name`, `description`, `tag`) VALUES
+INSERT INTO `restaurant` (`id`, `name`, `description`, `tag`) VALUES
     (1, "傳統豆花店", NULL, "甜點"),
     (2, "燒臘便當店", NULL, "中式"),
     (3, "牛肉麵店", NULL, "中式"),
@@ -10,7 +10,7 @@ INSERT IGNORE INTO `restaurant` (`id`, `name`, `description`, `tag`) VALUES
     (8, "清涼飲料店", NULL, "飲料"),
     (9, "甜蜜點心屋", NULL, "甜點");
 
-INSERT IGNORE INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`) VALUES
+INSERT INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`) VALUES
     (1, "原味豆花", "簡單清爽的豆花口味，以豆漿製成。", 50, 1),
     (2, "紅豆豆花", "加入了甜軟煮熟的紅豆，增添了甜味和口感。", 55, 1),
     (3, "花生豆花", "混入了研磨成花生醬的花生，帶來香濃的花生風味。", 60, 1),
@@ -57,18 +57,10 @@ INSERT IGNORE INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`
     (44, "抹茶卷", "濃郁的抹茶風味蛋糕卷，內含香滑奶油。", 85, 9),
     (45, "焦糖布丁", "滑順的布丁配上香甜的焦糖醬，口感絕佳。", 60, 9);
 
-INSERT IGNORE INTO `meal_review` (`id`, `user_id`, `meal_id`, `stars`, `content`) VALUES
-    (1, 1, 1, 2, "有紅豆的味道，感覺是紅豆豆花"),
-    (2, 1, 2, 5, "沒有味道，感覺是原味豆花"),
-    (3, 1, 3, 1, "裡面有叉燒，感覺拿到叉燒便當"),
-    (4, 1, 1, 3, "簡單清爽的豆花口味，感覺是用豆漿做的"),
-    (5, 1, 15, 4, "有四隻腳，感覺是燒兔子便當"),
-    (6, 1, 10, 4, "有珍珠，感覺是燒珍珠便當");
-
-INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`, `is_clerk`) VALUES
+INSERT INTO `user` (`username`, `password`, `is_admin`, `is_clerk`) VALUES
     ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 1, 0);
 
-INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`, `is_clerk`, `restaurant_id`) VALUES
+INSERT INTO `user` (`username`, `password`, `is_admin`, `is_clerk`, `restaurant_id`) VALUES
     ("Douhua", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 1),
     ("Roast", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 2),
     ("BeefNoodle", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 3),
@@ -79,7 +71,15 @@ INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`, `is_clerk`, `rest
     ("Beverage", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 8),
     ("Dessert", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 9);
 
-INSERT IGNORE INTO `order` (`timestamp`, `user_id`, `total_price`, `restaurant_id`, `paid`) VALUES
+INSERT INTO `meal_review` (`id`, `user_id`, `meal_id`, `stars`, `content`) VALUES
+    (1, 1, 1, 2, "有紅豆的味道，感覺是紅豆豆花"),
+    (2, 1, 2, 5, "沒有味道，感覺是原味豆花"),
+    (3, 1, 3, 1, "裡面有叉燒，感覺拿到叉燒便當"),
+    (4, 1, 1, 3, "簡單清爽的豆花口味，感覺是用豆漿做的"),
+    (5, 1, 15, 4, "有四隻腳，感覺是燒兔子便當"),
+    (6, 1, 10, 4, "有珍珠，感覺是燒珍珠便當");
+
+INSERT INTO `order` (`timestamp`, `user_id`, `total_price`, `restaurant_id`, `paid`) VALUES
     ('2022-03-15 08:32:45', 2, 150, 3, FALSE),
     ('2022-04-20 12:15:30', 1, 220, 4, FALSE),
     ('2022-05-02 17:45:21', 3, 180, 2, FALSE),
