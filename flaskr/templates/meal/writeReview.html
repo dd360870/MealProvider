@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .textarea-large {
+      width: 50%; /* Make the textarea full-width */
+      height: 100px; /* Set the height of the textarea */
+      padding: 10px; /* Add some padding inside the textarea */
+      font-size: 16px; /* Set a comfortable font size */
+      box-sizing: border-box; /* Include padding and border in the element's total width and height */
+      border-radius: 8px;
+    }
+    .submit-button {
+      font-size: 1.5rem; /* 調整文字大小 */
+      color: #fff;       /* 調整文字顏色 */
+      background-color: #acadb0; /* 按鈕背景顏色 */
+      border-color: #000000;     /* 按鈕邊框顏色 */
+      width: 100px;
+      height: 40px;
+      display: inline-block;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 8px;
+    }
+    .submit-button:hover {
+      background-color: #616162; /* 懸停時的背景顏色 */
+      border-color: #000000;     /* 懸停時的邊框顏色 */
+    }
+    .content  i {
+      color: #FFC107;
+    }
+    .rating {
+      border: none;
+      float: left;
+      position: absolute;
+      top: 17%;
+      left: 38%;
+    }
+    
+    .rating > label {
+      color: #90A0A3;
+      float: right;
+    }
+    
+    .rating > label:before {
+      margin: 5px;
+      font-size: 2em;
+      font-family: FontAwesome;
+      content: "\f005";
+      display: inline-block;
+    }
+    
+    .rating > input {
+      display: none;
+    }
+    
+    .rating > input:checked ~ label,
+    .rating:not(:checked) > label:hover,
+    .rating:not(:checked) > label:hover ~ label {
+      color: #FFC107;
+    }
+    
+    .rating > input:checked + label:hover,
+    .rating > input:checked ~ label:hover,
+    .rating > label:hover ~ input:checked ~ label,
+    .rating > input:checked ~ label:hover ~ label {
+      color: #FECE31;
+    }
+
+  </style>
+  <br>
+  <center><h1>{{ meal.name }}</h1>
+    <p>Please rate the meal</p>
+    <!-- <div class="content">
+      <span><i class="fa fa-star"></i></span>
+    </div> -->
+    <!-- <span class="star-cb-group">
+      <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
+      <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
+      <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
+      <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
+      <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
+      <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
+    </span> -->
+      <div class="rating">
+        <input type="radio" id="star5" name="rating" value="5" />
+        <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
+        <input type="radio" id="star4" name="rating" value="4" />
+        <label class="star" for="star4" title="Great" aria-hidden="true"></label>
+        <input type="radio" id="star3" name="rating" value="3" />
+        <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
+        <input type="radio" id="star2" name="rating" value="2" />
+        <label class="star" for="star2" title="Good" aria-hidden="true"></label>
+        <input type="radio" id="star1" name="rating" value="1" />
+        <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+      </div>
+    <br>
+    <br>
+    <br>
+    <p>Please write your comment</p>
+    <textarea id="userInput" class="textarea-large" placeholder="Insert your text here"></textarea>
+    <br>
+    <button class="submit-button" onclick="displayRadioValue()">Submit</button>
+
+    <p id="result"></p>
+    </center>
+    <script>
+      function displayRadioValue() {
+          var ele = document.getElementsByName('rating');
+          for (i = 0; i < ele.length; i++) {
+              if (ele[i].checked)
+                  document.getElementById("result").innerHTML
+                      = "star: " + ele[i].value;
+          }
+      }
+    </script>
+{% endblock %}

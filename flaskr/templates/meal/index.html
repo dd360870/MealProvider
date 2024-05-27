@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .content  i {
+      color: #FFC107;
+    }
+  </style>
+  <br>
+  <center><h1>{{ meal.name }}</h1></center>
+  {% for review in reviews %}
+    <p>{{ review.stars }} <i class="fa fa-star"></i></p>
+    <p>{{ review.content }}</p>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

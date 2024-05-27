@@ -4,6 +4,8 @@
   <h1>{{ restaurant.name }}</h1>
   {% for meal in meals %}
     <p>{{ meal.name }} | {{ meal.description }} | {{ meal.price }}</p>
+    <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
+    <a href="{{ url_for('meal.writeReview', id=meal.id) }}">撰寫評論</a>
     {% if not loop.last %}
       <hr>
     {% endif %}
