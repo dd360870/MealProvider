@@ -18,4 +18,4 @@ def index(id):
         meals.sort(key=lambda x: x.price)
     elif sort_by == 'sales':
         meals.sort(key=lambda x: x.sales, reverse=True)
-    return render_template("restaurant/index.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
+    return render_template("restaurant/index.html", restaurant=restaurant, T=meals, sort_by=sort_by)
