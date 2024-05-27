@@ -1,0 +1,18 @@
+{% extends 'clerk/base.html' %}
+
+{% block title %}Clerk{% endblock %}
+
+{% block content %}
+  <h1>取消訂單</h1>
+  <div style="height: 300px; overflow-y: auto;">
+    <form action="{{ url_for('clerk.cancel_orders') }}" method="post">
+        {% for order in orders %}
+            <label>
+                <input type="checkbox" name="cancel_orders[]" value="{{ order.id }}">
+                Order{{order.id}} | user ID: {{ order.user_id }} | {{ order.total_price }} 元
+            </label><br>
+        {% endfor %}
+        <button class="btn btn-danger mx-2" type="submit">刪除</button>
+    </form>
+</div>
+{% endblock %}

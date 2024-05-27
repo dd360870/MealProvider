@@ -57,9 +57,6 @@ INSERT IGNORE INTO `meal` (`id`, `name`, `description`, `price`, `restaurant_id`
     (44, "抹茶卷", "濃郁的抹茶風味蛋糕卷，內含香滑奶油。", 85, 9),
     (45, "焦糖布丁", "滑順的布丁配上香甜的焦糖醬，口感絕佳。", 60, 9);
 
-INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`) VALUES
-    ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 1);
-
 INSERT IGNORE INTO `meal_review` (`id`, `user_id`, `meal_id`, `stars`, `content`) VALUES
     (1, 1, 1, 2, "有紅豆的味道，感覺是紅豆豆花"),
     (2, 1, 2, 5, "沒有味道，感覺是原味豆花"),
@@ -67,3 +64,40 @@ INSERT IGNORE INTO `meal_review` (`id`, `user_id`, `meal_id`, `stars`, `content`
     (4, 1, 1, 3, "簡單清爽的豆花口味，感覺是用豆漿做的"),
     (5, 1, 15, 4, "有四隻腳，感覺是燒兔子便當"),
     (6, 1, 10, 4, "有珍珠，感覺是燒珍珠便當");
+
+INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`, `is_clerk`) VALUES
+    ("nol", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 1, 0);
+
+INSERT IGNORE INTO `user` (`username`, `password`, `is_admin`, `is_clerk`, `restaurant_id`) VALUES
+    ("Douhua", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 1),
+    ("Roast", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 2),
+    ("BeefNoodle", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 3),
+    ("FriedRice", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 4),
+    ("Hamburger", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 5),
+    ("Pasta", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 6),
+    ("Sushi", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 7),
+    ("Beverage", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 8),
+    ("Dessert", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 9);
+
+INSERT IGNORE INTO `order` (`timestamp`, `user_id`, `total_price`, `restaurant_id`, `paid`) VALUES
+    ('2022-03-15 08:32:45', 2, 150, 3, FALSE),
+    ('2022-04-20 12:15:30', 1, 220, 4, FALSE),
+    ('2022-05-02 17:45:21', 3, 180, 2, FALSE),
+    ('2022-06-10 09:28:15', 2, 270, 1, FALSE),
+    ('2022-07-05 14:10:53', 1, 320, 5, FALSE),
+    ('2022-08-18 11:20:37', 4, 200, 3, FALSE),
+    ('2022-09-24 18:40:12', 3, 190, 2, FALSE),
+    ('2022-10-08 13:55:29', 5, 240, 4, FALSE),
+    ('2022-11-11 10:22:48', 2, 180, 1, FALSE),
+    ('2022-12-05 16:37:05', 1, 300, 5, FALSE),
+    ('2023-01-19 09:48:17', 4, 260, 3, FALSE),
+    ('2023-02-27 14:55:40', 3, 210, 2, FALSE),
+    ('2023-03-03 17:25:55', 2, 150, 1, FALSE),
+    ('2023-04-09 11:30:20', 5, 280, 4, FALSE),
+    ('2023-05-14 15:40:48', 1, 330, 5, FALSE),
+    ('2023-06-22 08:55:10', 3, 220, 2, FALSE),
+    ('2023-07-30 12:20:35', 2, 190, 1, FALSE),
+    ('2023-08-04 16:45:42', 4, 210, 3, FALSE),
+    ('2023-09-11 10:58:59', 1, 270, 5, FALSE),
+    ('2023-10-25 13:22:17', 3, 440, 2, FALSE),
+    ('2023-10-25 13:22:15', 3, 230, 2, FALSE);

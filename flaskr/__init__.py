@@ -28,6 +28,7 @@ def create_app(test_config=None):
     DB_HOST = environ.get('DB_HOST')
 
     app.config["DEBUG"] = (DEBUG == '1')
+    app.config["DB_HOST"] = DB_HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mariadb+mariadbconnector://nol:nol@{DB_HOST}:3306/meal_provider"
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
         "connect_args": {
@@ -50,11 +51,12 @@ def create_app(test_config=None):
 
         register_cli(app)
 
-    from flaskr.view import auth, home, restaurant, admin
+    from flaskr.view import auth, home, restaurant, admin, clerk
     app.register_blueprint(admin.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(home.bp)
     app.register_blueprint(restaurant.bp)
+    app.register_blueprint(clerk.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

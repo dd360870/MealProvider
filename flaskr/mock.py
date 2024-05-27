@@ -12,25 +12,29 @@ def random_datetime():
 
 def add_orders():
 
-    meals = orm.Meal.query.all()
     users = orm.User.query.all()
+    restaurants = orm.Restaurant.query.all()
 
     if len(users) == 0:
         raise Exception("Please insert \"User\" table first.")
 
-    if len(meals) == 0:
-        raise Exception("Please insert \"Meal\" table first.")
-
     for _ in range(100):
-        order = orm.Order(total_price=0, timestamp=random_datetime(), user_id=random.choice(users).id)
+        restaurant = random.choice(restaurants)
+        order = orm.Order(total_price=0, timestamp=random_datetime(), user_id=random.choice(users).id, restaurant_id=restaurant.id)
 
         # make sure order has id
         db.session.add(order)
         db.session.flush()
 
+        meals = orm.Meal.query.where(orm.Meal.restaurant_id==restaurant.id).all()
+
         # 餐點：隨機抽1~10項，每項最多買8個
         total_price = 0
-        k = random.choices(list(range(1, 6)), weights=(100, 20, 5, 5, 1), k=1)[0]
+
+        item_count = min(len(meals), 5)
+
+        k = random.choices(list(range(1, item_count + 1)), weights=(100, 20, 5, 5, 1)[:item_count], k=1)[0]
+
         for m in random.choices(meals, k=k):
             count = random.choices(list(range(1, 5)), weights=(50, 40, 1, 1), k=1)[0]
 

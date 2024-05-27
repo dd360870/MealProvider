@@ -45,6 +45,8 @@ def login():
         if user is not None:
             session.clear()
             session['user_id'] = user.id
+            if user.is_clerk:
+                return redirect(url_for('clerk.index', id=user.restaurant_id))
             return redirect(url_for('index'))
 
         flash("User credential is invalid.")

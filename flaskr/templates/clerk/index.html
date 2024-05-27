@@ -1,0 +1,13 @@
+{% extends 'clerk/base.html' %}
+
+{% block title %}Clerk{% endblock %}
+
+{% block content %}
+  <h1>{{ restaurant.name }}</h1>
+  {% for meal in meals %}
+    <p>{{ meal.name }} | {{ meal.description }} | {{ meal.price }}</p>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'clerk/base.html' %}
+
+{% block title %}Clerk{% endblock %}
+
+{% block content %}
+  <h1>{{ customer.username }}的訂單準備中...</h1>
+  <h2>訂單內容</h2>
+  {% for item in order_item %}
+    <p>{{ item.meal.name }} {{ item.meal.price }} 元 {{ item.count }} 份 | {{ item.price }}</p>
+  {% endfor %}
+  <hr>
+  <p id="totalPrice">總金額： {{total_price}}</p>
+{% endblock %}

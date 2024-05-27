@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import SmallInteger, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.sql import func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, backref
 
 class Base(DeclarativeBase):
   pass
@@ -18,7 +18,10 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_clerk: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    restaurant_id = mapped_column(Integer, ForeignKey('restaurant.id'), nullable=True)
 
+    restaurant = relationship("Restaurant")
     orders = relationship("Order", backref="user")
     reviews = relationship("MealReview", backref="user")
 
@@ -59,10 +62,11 @@ class Order(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     timestamp: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
     user_id = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
-    total_price: Mapped[int] = mapped_column(Integer)
+    total_price: Mapped[int] = mapped_column(Integer, nullable=False)
     paid: Mapped[bool] = mapped_column(Boolean, default=False)
+    restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"), nullable=False)
 
-    items = relationship("OrderItem", backref="order")
+    items = relationship("OrderItem", backref=backref("order", cascade="all, delete-orphan", single_parent=True))
 
 class OrderItem(db.Model):
     __tablename__ = "order_item"

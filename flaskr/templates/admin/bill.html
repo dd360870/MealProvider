@@ -1,0 +1,56 @@
+<style>
+    .bill-container {
+        max-height: 700px;
+        overflow: auto;
+    }
+    .user-container {
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style
+{% extends 'admin/base.html' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+    <h1>結帳通知</h1>
+    <div style="text-align: right;">
+        <button class="btn btn-danger mx-2" style="text-align: right;">send mail</button>
+    </div>
+    <div class="bill-container">
+    {% for user_id, bill_data in user_bill_data.items() %}
+    <div class="user-container">
+        <h2>{{ user_id_to_name[user_id] }}</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Amounts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for amount, year, month in bill_data %}
+                    <tr>
+                        <td>{{ "{:02d}".format(month) }}/{{ year }}</td>
+                        <td>{{ amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}
