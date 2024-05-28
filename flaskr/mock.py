@@ -18,7 +18,7 @@ def add_orders():
     if len(users) == 0:
         raise Exception("Please insert \"User\" table first.")
 
-    for _ in range(100):
+    for _ in range(100*len(users)):
         restaurant = random.choice(restaurants)
         order = orm.Order(total_price=0, timestamp=random_datetime(), user_id=random.choice(users).id, restaurant_id=restaurant.id)
 
@@ -35,7 +35,7 @@ def add_orders():
 
         k = random.choices(list(range(1, item_count + 1)), weights=(100, 20, 5, 5, 1)[:item_count], k=1)[0]
 
-        for m in random.choices(meals, k=k):
+        for m in random.sample(meals, k=k):
             count = random.choices(list(range(1, 5)), weights=(50, 40, 1, 1), k=1)[0]
 
             total_price += (count*m.price)
