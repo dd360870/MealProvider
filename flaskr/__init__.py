@@ -5,6 +5,7 @@ from flask import Flask, current_app
 from flaskr.commands import register_cli
 
 from celery import Celery, Task
+from flask_mail import Mail, Message
 
 def celery_init_app(app: Flask) -> Celery:
     class FlaskTask(Task):
@@ -48,6 +49,7 @@ def create_app(test_config=None):
         }
     }
 
+    # Initialize Celery
     app.config.from_mapping(
         CELERY=dict(
             broker_url="redis://redis",
@@ -58,6 +60,18 @@ def create_app(test_config=None):
     )
     app.config.from_prefixed_env()
     celery_init_app(app)
+
+    # Initialize SMTP
+    app.config['MAIL_SERVER'] = 'smtp.mailgun.org'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_USERNAME'] = 'postmaster@sandbox357a7d541f9a4f87b3bbe8af5013ced2.mailgun.org'
+    app.config['MAIL_PASSWORD'] = 'e75ee2616c18101cdc5a00b3af5e33de-0996409b-881c5474'
+    app.config['MAIL_DEFAULT_SENDER'] = 'admin@mealprovider.nollab.me'
+
+    mail = Mail(app)
+    app.extensions["mail"] = mail
 
     # a simple page that says hello
     @app.route('/ping')

@@ -9,9 +9,13 @@ dependencies = [
     "gunicorn",
     "celery",
     "redis",
+    "Flask-Mail",
 ]
 
 [project.optional-dependencies] # Optional
 dev = [
     "watchdog"
 ]
+
+[tool.setuptools]
+py-modules = []
