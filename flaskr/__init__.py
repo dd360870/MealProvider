@@ -4,6 +4,20 @@ from os import environ
 from flask import Flask, current_app
 from flaskr.commands import register_cli
 
+from celery import Celery, Task
+
+def celery_init_app(app: Flask) -> Celery:
+    class FlaskTask(Task):
+        def __call__(self, *args: object, **kwargs: object) -> object:
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery_app = Celery(app.name, task_cls=FlaskTask)
+    celery_app.config_from_object(app.config["CELERY"])
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
+    return celery_app
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -24,10 +38,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    DEBUG = environ.get('DEBUG')
     DB_HOST = environ.get('DB_HOST')
 
-    app.config["DEBUG"] = (DEBUG == '1')
     app.config["DB_HOST"] = DB_HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mariadb+mariadbconnector://nol:nol@{DB_HOST}:3306/meal_provider"
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
@@ -35,6 +47,17 @@ def create_app(test_config=None):
             'connect_timeout': 10
         }
     }
+
+    app.config.from_mapping(
+        CELERY=dict(
+            broker_url="redis://redis",
+            result_backend="redis://redis",
+            task_ignore_result=True,
+            broker_connection_retry_on_startup=True,
+        ),
+    )
+    app.config.from_prefixed_env()
+    celery_init_app(app)
 
     # a simple page that says hello
     @app.route('/ping')

@@ -32,5 +32,11 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
+  redis:
+    image: redis
+  celery:
+    image: ghcr.io/dd360870/mealprovider-web:latest
+    command: celery -A make_celery worker --loglevel INFO
+
 volumes:
   database:

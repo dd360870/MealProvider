@@ -14,6 +14,7 @@ WORKDIR /app
 COPY ./pyproject.toml ./pyproject.toml
 COPY ./flaskr ./flaskr
 COPY ./data.sql ./data.sql
+COPY ./make_celery.py ./make_celery.py
 
 USER root
 RUN pip install -e .
