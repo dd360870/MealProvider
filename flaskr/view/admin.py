@@ -17,9 +17,23 @@ def index():
 @bp.route('/edit_restaurant/<int:id>/', methods=('GET', 'POST'))
 @admin_required
 def edit_restaurant(id):
-    selected_tags = request.args.getlist('tag')
-    restaurants = Restaurant.getByTags(selected_tags)
-    return render_template("admin/index.html", restaurants=restaurants, edit=id)
+
+    sort_by = request.args.get('sort_by', None)
+    restaurant = Restaurant.getById(id)
+    meals = restaurant.meals
+    if sort_by == 'stars':
+        meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
+    elif sort_by == 'price':
+        meals.sort(key=lambda x: x.price)
+    elif sort_by == 'sales':
+        meals.sort(key=lambda x: x.sales, reverse=True)
+    return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
+
+@bp.route('/edit_restaurant/<int:id>/', methods=('GET', 'POST'))
+@admin_required
+def edit_restaurant_name_and_tag(id):
+
+    return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
 
 
 @bp.route("/bill", methods=('GET', 'POST'))

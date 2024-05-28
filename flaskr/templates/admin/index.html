@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -6,134 +6,86 @@
   .form-check-input {
     vertical-align: middle;
   }
-
   .form-check-label {
-    display: inline-block;
+    display: inline-block; 
     vertical-align: middle;
     margin-bottom: 0;
   }
-
   .menu-button {
     font-size: 1.5rem;
     color: #fff;
     background-color: #acadb0;
-    border-color: #000000;
     width: 100px;
     height: 35px;
     display: inline-block;
     text-align: center;
     line-height: 20px;
   }
-
   .menu-button:hover {
     background-color: #616162;
-    border-color: #000000;
   }
-
-  .card .close {
-    position: absolute;
-    border: none;
-    background: none;
-    top: 10px;
-    right: 10px;
-    z-index: 1;
-  }
-  .plus-button {
-    position: absolute;
-    font-size: 2rem; /* Adjust the size as needed */
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: none;
+  .i {
+    color: #FFC107;
   }
 </style>
 
 <div class="container mt-4">
-  <form method="get" action="{{ url_for('admin.index') }}" class="mb-4">
+  <form method="get" action="{{ url_for('home.index') }}" class="mb-4">
     <label style="font-size: 20px;">餐廳類別：</label><br>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="chinese" name="tag" value="中式" {% if '中式' in
-        request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <input class="form-check-input" type="checkbox" id="chinese" name="tag" value="中式" {% if '中式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
       <label class="form-check-label" for="chinese" style="font-size: 20px;">中式</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="western" name="tag" value="西式" {% if '西式' in
-        request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <input class="form-check-input" type="checkbox" id="western" name="tag" value="西式" {% if '西式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
       <label class="form-check-label" for="western" style="font-size: 20px;">西式</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="japanese" name="tag" value="日式" {% if '日式' in
-        request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <input class="form-check-input" type="checkbox" id="japanese" name="tag" value="日式" {% if '日式' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
       <label class="form-check-label" for="japanese" style="font-size: 20px;">日式</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="beverages" name="tag" value="飲料" {% if '飲料' in
-        request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <input class="form-check-input" type="checkbox" id="beverages" name="tag" value="飲料" {% if '飲料' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
       <label class="form-check-label" for="beverages" style="font-size: 20px;">飲料</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="checkbox" id="dessert" name="tag" value="甜點" {% if '甜點' in
-        request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
+      <input class="form-check-input" type="checkbox" id="dessert" name="tag" value="甜點" {% if '甜點' in request.args.getlist('tag') %}checked{% endif %} onchange="this.form.submit()">
       <label class="form-check-label" for="dessert" style="font-size: 20px;">甜點</label>
     </div>
   </form>
 
-  {% for restaurant in restaurants %}
-  <div class="card mb-4">
-    <div class="card-body">
-      <div>
-        {% if edit == restaurant.id %}
-        <button type="button" class="close" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <input type="text" class="col-form-label col-form-label-lg" id="rest_name" name="rest_name" value={{
-          restaurant.name }}>
-        <select class="form-select-bg-size">
-          <option selected>{{restaurant.tag}}</option>
-          {% if restaurant.tag != "中式" %}
-          <option value="中式">中式</option>
-          {% endif %}
-          {% if restaurant.tag != "西式" %}
-          <option value="西式">西式</option>
-          {% endif %}
-          {% if restaurant.tag != "日式" %}
-          <option value="日式">日式</option>
-          {% endif %}
-          {% if restaurant.tag != "飲料" %}
-          <option value="飲料">飲料</option>
-          {% endif %}
-          {% if restaurant.tag != "甜點" %}
-          <option value="甜點">甜點</option>
-          {% endif %}
-        </select>
-        <div style="display:block; margin: 5px 0;">
-          <a style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
-            class="btn menu-button mt-2">取消</a>
-          <a style="float: right; background-color:rgb(51, 158, 230)"
-            href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn menu-button mt-2">確認</a>
+  <div class="row row-cols-1 row-cols-md-3">
+    {% for restaurant in restaurants %}
+    <div class="card mb-4 border-0">
+      <div class="card mx-2">
+        <div class="card-body row align-items-center">
+          <div class="content" style="width: 70%;">
+            <div>
+              <h2 class="d-inline">{{ restaurant.name }}</h2>
+              <span class="badge badge bg-light text-dark ms-2">{{ restaurant.tag }}</span>
+            </div>
+            <div class="d-flex align-items-center mt-2">
+              <a href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn menu-button">編輯</a>
+              <span class="mx-2"></span>
+              <i class="fa fa-star i"></i>
+              <span class="mx-1"></span>
+              {% if restaurant.average_stars is not none %}
+              {{ restaurant.average_stars|round(1) }} ({{ restaurant.review_count }})
+              {% else %}
+              尚未有評價
+              {% endif %}
+            </div>
+          </div>
+          <div class="d-flex justify-content-end" style="width: 30%;">
+            <img src="https://maughons.com/cdn/shop/products/retro-restaurant-menu-board-wallpaper-mural-custom-sizes-available-maughons-307936_1024x1024.jpg?v=1632422765" width="100%" height="100%" style="border-radius: 8px;">
+          </div>
         </div>
-        {% else %}
-        <h2 class="d-inline">{{ restaurant.name }}</h2>
-        <span class="badge badge bg-light text-dark ms-2">{{ restaurant.tag }}</span>
-        <div style="display:block; margin: 5px 0;">
-          <a style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
-            class="btn menu-button mt-2">編輯</a>
-        </div>
-        {% endif %}
-
       </div>
-      <a href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn menu-button mt-2">Menu</a>
-
     </div>
+    {% else %}
+    <p class="text-center">No restaurants available</p>
+    {% endfor %}
   </div>
   
-  {% else %}
-  <p class="text-center">No restaurants available</p>
-  {% endfor %}
-  <div class="card mb-4" style="background-color:#cccccc;">
-    <a class="card-body" href="#" style="text-decoration: none; text-align: center;">
-      +
-    </a>
-  </div>
 </div>
 {% endblock %}

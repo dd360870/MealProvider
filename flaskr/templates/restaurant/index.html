@@ -45,7 +45,7 @@
             <i class="fa-solid fa-dollar-sign i"></i> {{ meal.price }} |
             <i class="fa fa-star i"></i>
             {% if meal.average_stars is not none %}
-              {{ meal.average_stars|round(1) }}
+              {{ meal.average_stars|round(1) }} ({{ meal.review_count }})
             {% else %}
               尚未有評價
             {% endif %}

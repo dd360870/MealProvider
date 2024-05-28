@@ -21,21 +21,6 @@
     vertical-align: middle;
     margin-bottom: 0;
   }
-  .menu-button {
-    font-size: 1.5rem;
-    color: #fff;
-    background-color: #acadb0;
-    border-color: #000000;
-    width: 100px;
-    height: 35px;
-    display: inline-block;
-    text-align: center;
-    line-height: 20px;
-  }
-  .menu-button:hover {
-    background-color: #616162;
-    border-color: #000000;
-  }
 </style>
 
 <div class="container mt-4">
@@ -58,15 +43,59 @@
     </div>
   </form>
 
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <div>
+        <button type="button" class="btn-close" aria-label="Close" style="float:right;"></button>
+        <div class="input-group input-group-lg mb-3" style="width: 80%;">
+          <span class="input-group-text" id="inputGroup-sizing-default">店名</span>
+          <input type="text" class="form-control" aria-label="Text input with dropdown button" id="restaurant_name" value={{ restaurant.name }}>
+          <span class="input-group-text" id="inputGroup-sizing-default">種類</span>
+          <select class="form-select" id="inputGroupSelect01">
+            <option selected value="{{ restaurant.tag }}">{{ restaurant.tag }}</option>
+            {% if restaurant.tag != "中式" %}
+            <option value="中式">中式</option>
+            {% endif %}
+            {% if restaurant.tag != "西式" %}
+            <option value="西式">西式</option>
+            {% endif %}
+            {% if restaurant.tag != "日式" %}
+            <option value="日式">日式</option>
+            {% endif %}
+            {% if restaurant.tag != "飲料" %}
+            <option value="飲料">飲料</option>
+            {% endif %}
+            {% if restaurant.tag != "甜點" %}
+            <option value="甜點">甜點</option>
+            {% endif %}
+          </select>
+          <button type="button" href="#" class="btn btn-primary">確認</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="list-group">
+    <div class="list-group-item" style="display: flex; justify-content: center; align-items: center;">
+      <button type="button" href="#" class="btn btn-success">新增餐點 +_+</button>
+    </div>
   {% if meals %}
-    <div class="list-group">
       {% for meal in meals %}
         <div class="list-group-item">
-          <h4 class="mb-1">{{ meal.name }}</h4>
-          <a style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn menu-button mt-2">編輯</a>
-          <p class="mb-1">{{ meal.description }}</p>
+          <button type="button" class="btn-close" aria-label="Close" style="float:right" ></button>
+          <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
+            <span class="input-group-text" id="inputGroup-sizing-default">名稱</span>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.name }} >
+            <span class="input-group-text"><i class="fa-solid fa-dollar-sign i"></i></span>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.price }} >
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">描述</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.description }} >
+          </div>
           <small class="text-muted">
-            <i class="fa-solid fa-dollar-sign i"></i> {{ meal.price }} |
             <i class="fa fa-star i"></i>
             {% if meal.average_stars is not none %}
               {{ meal.average_stars|round(1) }}
@@ -74,13 +103,20 @@
               尚未有評價
             {% endif %}
             | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
-            
+            <button type="button" style="float:right; margin-right: 20%;"
+            href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn btn-primary">確認</button>
           </small>
+          <!-- <button type="button" style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
+            class="btn btn-secondary">取消</button> -->
+          
+          
+
         </div>
       {% endfor %}
-    </div>
+    
   {% else %}
     <p class="text-center">No meals available</p>
   {% endif %}
+  </div>
 </div>
 {% endblock %}
