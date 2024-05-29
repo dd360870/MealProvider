@@ -1,5 +1,27 @@
-from flaskr.db import db, Meal
+from flaskr.db import db, Meal, Restaurant
 
+def hide(id):
+    meal = Meal.query.get(id)
+
+    meal.is_available=False
+
+    db.session.commit()
+
+def add(restaurant_id, name, description, price):
+
+    new_meal = Meal(
+        name=name, 
+        price=price, 
+        description=description, 
+        restaurant_id=restaurant_id,
+        is_available=True
+    )
+    db.session.add(new_meal)
+
+    db.session.commit()
+
+    last_restaurant = Restaurant.query.order_by(Restaurant.id.desc()).first()
+    return last_restaurant.id
 
 def update(id, name, description, price):
     meal = Meal.query.get(id)

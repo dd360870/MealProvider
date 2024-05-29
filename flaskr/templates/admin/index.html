@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'admin/base.html' %}
 
 {% block content %}
 
@@ -65,7 +65,7 @@
               <span class="badge badge bg-light text-dark ms-2">{{ restaurant.tag }}</span>
             </div>
             <div class="d-flex align-items-center mt-2">
-              <a href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn menu-button">編輯</a>
+              <a href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn btn-primary">編輯</a>
               <span class="mx-2"></span>
               <i class="fa fa-star i"></i>
               <span class="mx-1"></span>
@@ -85,6 +85,15 @@
     {% else %}
     <p class="text-center">No restaurants available</p>
     {% endfor %}
+    <div class="card mb-4 border-0">
+      <div class="card mx-2 border-0">
+        <div class="card-body row align-items-center">
+          <div class="d-flex align-items-center mt-2">
+            <a href="{{ url_for('admin.add_restaurant') }}" class="btn btn-success">新增</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
 </div>

@@ -46,8 +46,10 @@
 
   <div class="card mb-4">
     <div class="card-body">
+      <form method="POST" action="{{ url_for('admin.hide_restaurant', id=restaurant.id)}}">
+        <button type="submit" class="btn-close" aria-label="Close" style="float:right"></button>
+      </form>
       <form  method="POST" action="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}">
-        <button type="button" class="btn-close" aria-label="Close" style="float:right;"></button>
         <div class="input-group input-group-lg mb-3" style="width: 80%;">
           <span class="input-group-text" id="inputGroup-sizing-default">店名</span>
           <input type="text" class="form-control" aria-label="Text input with dropdown button" id="restaurant_name" name="restaurant_name" value={{ restaurant.name }}>
@@ -77,15 +79,19 @@
     </div>
   </div>
 
-  <div class="list-group">
-    <div class="list-group-item" style="display: flex; justify-content: center; align-items: center;">
+  <div class="list-group"  id="meal-list">
+    <form class="list-group-item" style="display: flex; justify-content: center; align-items: center;">
       <button type="button" href="#" class="btn btn-success">新增餐點 +_+</button>
-    </div>
+    </form>
   {% if meals %}
       {% for meal in meals %}
-        <form class="list-group-item" method="POST" action="{{ url_for('admin.edit_meal', id=meal.id)}}">
+      <div class="list-group-item" >
+        <form method="POST" action="{{ url_for('admin.hide_meal', id=meal.id)}}">
           <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
-          <button type="button" class="btn-close" aria-label="Close" style="float:right" ></button>
+          <button type="submit" class="btn-close" aria-label="Close" style="float:right"></button>
+        </form>
+        <form method="POST" action="{{ url_for('admin.edit_meal', id=meal.id)}}">
+          <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
           <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
             <span class="input-group-text" id="inputGroup-sizing-default">名稱</span>
             <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.name }} name="meal_name">
@@ -105,19 +111,58 @@
             {% endif %}
             | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
             <button type="submit" style="float:right; margin-right: 20%;"
-            href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn btn-primary">確認</button>
+             class="btn btn-primary">確認</button>
           </small>
           <!-- <button type="button" style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
             class="btn btn-secondary">取消</button> -->
           
-          
-
           </form>
+        </div>
       {% endfor %}
     
   {% else %}
-    <p class="text-center">No meals available</p>
+    <p class="text-center"><br>No meals available</p>
   {% endif %}
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addMealButton = document.querySelector('.btn-success');
+    const mealList = document.getElementById('meal-list');
+
+    addMealButton.addEventListener('click', () => {
+      const newMealItem = document.createElement('div');
+      newMealItem.classList.add('list-group-item');
+
+      const newMealForm = `
+        <form method="POST" action="{{ url_for('admin.add_meal', restaurant_id=restaurant.id) }}">  
+          <button type="button" class="btn-close" aria-label="Close" style="float:right"></button>
+          <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
+            <span class="input-group-text">名稱</span>
+            <input class="form-control" aria-label="Sizing example input" name="meal_name">
+            <span class="input-group-text"><i class="fa-solid fa-dollar-sign i"></i></span>
+            <input class="form-control" aria-label="Sizing example input" name="meal_price">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">描述</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" name="meal_description">
+          </div>
+          <small class="text-muted">
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            新餐點
+          </small>
+          <button type="submit" style="float:right; margin-right: 20%;" class="btn btn-success">新增</button>
+        </form>
+      `;
+
+      newMealItem.innerHTML = newMealForm;
+      mealList.insertBefore(newMealItem, addMealButton.parentElement); // Add before the "+" button
+      addMealButton.parentElement.style.display = 'none'; 
+    });
+  });
+</script>
 {% endblock %}

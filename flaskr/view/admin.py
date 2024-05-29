@@ -36,6 +36,20 @@ def edit_restaurant(id):
 
         return redirect(url_for('admin.edit_restaurant', id=id))
 
+@bp.route('/hide_restaurant/<int:id>/', methods=['POST'])
+@admin_required
+def hide_restaurant(id):
+    Restaurant.hide(id)
+    restaurants = Restaurant.getAll()
+    return render_template('admin/index.html', restaurants=restaurants, edit=None)
+
+@bp.route('/add_restaurant/', methods=['GET','POST'])
+@admin_required
+def add_restaurant():
+    restaurant_id = Restaurant.add()
+    restaurant = Restaurant.getById(restaurant_id)
+    return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=None, sort_by=None)
+
 @bp.route('/edit_meal/<int:id>/', methods=['POST'])
 @admin_required
 def edit_meal(id):
@@ -47,6 +61,24 @@ def edit_meal(id):
 
     return redirect(url_for('admin.edit_restaurant', id=rest_id))
 
+@bp.route('/add_meal/<int:restaurant_id>/', methods=['POST'])
+@admin_required
+def add_meal(restaurant_id):
+    new_name = request.form['meal_name']
+    new_price = request.form['meal_price']
+    new_description = request.form['meal_description']
+    # rest_id = request.form['rest_id']
+    Meal.add(restaurant_id, new_name, new_description, new_price)
+
+    return redirect(url_for('admin.edit_restaurant', id=restaurant_id))
+
+@bp.route('/hide_meal/<int:id>/', methods=['POST'])
+@admin_required
+def hide_meal(id):
+    Meal.hide(id)
+    rest_id = request.form['rest_id']
+
+    return redirect(url_for('admin.edit_restaurant', id=rest_id))
 
 @bp.route("/bill", methods=('GET', 'POST'))
 @admin_required

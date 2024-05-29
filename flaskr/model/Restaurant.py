@@ -1,6 +1,26 @@
 from flaskr.db import db, Restaurant, Meal, MealReview, OrderItem
 from sqlalchemy.sql import func
 
+def add():
+
+    new_restaurant = Restaurant(
+        name='新餐廳', 
+        description=None, 
+        tag='甜點', 
+        is_available=True
+    )
+    db.session.add(new_restaurant)
+
+    db.session.commit()
+    return new_restaurant.id
+
+def hide(id):
+    restaurant = Restaurant.query.get(id)
+
+    restaurant.is_available=False
+
+    db.session.commit()
+
 def update(id, name, tag):
     restaurant = Restaurant.query.get(id) 
         
