@@ -24,10 +24,13 @@ def edit_restaurant(id):
         meals = restaurant.meals
         if sort_by == 'stars':
             meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
+            restaurant.unavailable_meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
         elif sort_by == 'price':
             meals.sort(key=lambda x: x.price)
+            restaurant.unavailable_meals.sort(key=lambda x: x.price)
         elif sort_by == 'sales':
             meals.sort(key=lambda x: x.sales, reverse=True)
+            restaurant.unavailable_meals.sort(key=lambda x: x.sales, reverse=True)
         return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
     elif request.method == 'POST':
         new_name = request.form['restaurant_name']
