@@ -14,7 +14,8 @@ dependencies = [
 
 [project.optional-dependencies] # Optional
 dev = [
-    "watchdog"
+    "watchdog",
+    "flower",
 ]
 
 [tool.setuptools]

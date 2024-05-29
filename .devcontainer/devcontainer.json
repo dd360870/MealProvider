@@ -23,7 +23,8 @@
 				"wholroyd.jinja",
 				"ms-azuretools.vscode-docker",
 				"njpwerner.autodocstring",
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"eamodio.gitlens"
 			]
 		}
 	},

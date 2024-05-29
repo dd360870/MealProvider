@@ -1,0 +1,27 @@
+
+<html>
+    <h1>結帳通知</h1>
+    <p>敬愛的 {{ user.username }} 您好：</p>
+    <table>
+        <thead>
+            <tr>
+                <th>月份</th>
+                <th>金額</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in details %}
+            <tr>
+                <td>{{ d.date.strftime('%Y-%m') }}</td>
+                <td>{{ d.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>總計</th>
+                <td>{{ details | sum(attribute='amount') }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</html>

@@ -71,6 +71,9 @@ INSERT INTO `user` (`username`, `password`, `is_admin`, `is_clerk`, `restaurant_
     ("Beverage", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 8),
     ("Dessert", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", 0, 1, 9);
 
+INSERT INTO `user` (`username`, `password`, `email`) VALUES
+    ("marvin", "scrypt:32768:8:1$2bcbReLqu0svD04J$49f592587e45af385dac161fa86cb903efa3b214637145dff5f7a9e3b010abce8c28484378ddd94bf180ac3f74c959167e67e1eea3f52188e7ac7f9e522801f4", "marvin.cs12@nycu.edu.tw");
+
 INSERT INTO `meal_review` (`id`, `user_id`, `meal_id`, `stars`, `content`) VALUES
     (1, 1, 1, 2, "有紅豆的味道，感覺是紅豆豆花"),
     (2, 1, 2, 5, "沒有味道，感覺是原味豆花"),

@@ -30,39 +30,39 @@
         <thead>
           <tr>
             <th class="col-8">員工名稱</th>
-            <th class="col-4 text-end">金額</th>
+            <th class="col-4 text-end">未結帳金額</th>
           </tr>
         </thead>
     </table>
-    {% for user_id, bill_data in user_bill_data.items() %}
-        
+    {% for b in bill_data %}
         <div class="card my-2" data-bs-toggle="collapse" href="#collapseExample-{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseExample-{{ loop.index }}">
             <div class="card-body row">
-                <div class="col-8">{{ user_id_to_name[user_id] }}</div>
-                <div class="col-4 text-end">{{ bill_data | sum(attribute=0) }}</div>
+                <div class="col-8">{{ b.user.username }}</div>
+                <div class="col-4 text-end">{{ b.detail | sum(attribute='amount') }}</div>
             </div>
         </div>
         <div class="collapse" id="collapseExample-{{ loop.index }}">
             <table>
                 <thead>
                     <tr>
-                        <th>Month</th>
-                        <th>Amounts</th>
+                        <th>結帳月份</th>
+                        <th>金額</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for amount, year, month in bill_data %}
+                    {% for d in b['detail'] %}
                     <tr>
-                        <td>{{ "{:02d}".format(month) }}/{{ year }}</td>
-                        <td>{{ amount }}</td>
+                        <td>{{ d.date.strftime('%Y-%m') }}</td>
+                        <td>{{ d.amount }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     {% endfor %}
-    <div style="text-align: right;">
-        <button class="btn btn-danger mx-2" style="text-align: right;">Send Mail</button>
-    </div>
+    <form method="POST" action="{{ url_for('admin.send_bill') }}" style="text-align: right;">
+        <input type="hidden" name="send_mail" value="1">
+        <button type="submit" class="btn btn-danger mx-2" style="text-align: right;">Send Mail</button>
+    </form>
 </div>
 {% endblock %}

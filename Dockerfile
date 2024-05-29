@@ -1,5 +1,7 @@
 FROM python
 
+ENV TZ="Asia/Taipei"
+
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PIP_ROOT_USER_ACTION=ignore
 
