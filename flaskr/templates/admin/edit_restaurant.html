@@ -124,6 +124,35 @@
     <p class="text-center"><br>No meals available</p>
   {% endif %}
   </div>
+
+  <br><hr><h5 class="text-center">Unavailable meals</h5>
+  <div class="list-group"  id="meal-list">
+  {% if restaurant.unavailable_meals %}
+      {% for meal in restaurant.unavailable_meals %}
+      <div class="list-group-item">
+        <h4 class="mb-1">{{ meal.name }}</h5>
+        <p class="mb-1">{{ meal.description }}</p>
+        <form method="POST" action="{{ url_for('admin.recover_meal', id=meal.id)}}">
+          <small class="text-muted">
+            <i class="fa-solid fa-dollar-sign i"></i> {{ meal.price }} |
+            <i class="fa fa-star i"></i>
+            {% if meal.average_stars is not none %}
+              {{ meal.average_stars|round(1) }} ({{ meal.review_count }})
+            {% else %}
+              尚未有評價
+            {% endif %}
+            | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
+              <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
+              <button type="submit" style="float:right; margin-right: 20%;" class="btn btn-info">復原餐點</button>
+          </small>
+        </form>
+      </div>
+      {% endfor %}
+    
+  {% else %}
+    <p class="text-center"><br>No meals unavailable</p>
+  {% endif %}
+  </div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', () => {

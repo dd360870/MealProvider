@@ -46,8 +46,9 @@ def getById(id) -> Restaurant | None:
     with db.session.no_autoflush:
         restaurant = db.session.execute(query).scalar_one_or_none()
         if restaurant:
+            restaurant.unavailable_meals = [meal for meal in restaurant.meals if meal.is_available == 0]
             restaurant.meals = [meal for meal in restaurant.meals if meal.is_available]
-            for meal in restaurant.meals:
+            for meal in restaurant.meals + restaurant.unavailable_meals:
                 meal.average_stars, meal.review_count = meal_review_stars_count(meal)
                 meal.sales = get_meal_sales(meal)
     return restaurant

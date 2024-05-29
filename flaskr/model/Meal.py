@@ -1,5 +1,12 @@
 from flaskr.db import db, Meal, Restaurant
 
+def recover(id):
+    meal = Meal.query.get(id)
+
+    meal.is_available=True
+
+    db.session.commit()
+
 def hide(id):
     meal = Meal.query.get(id)
 

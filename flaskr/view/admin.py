@@ -80,6 +80,14 @@ def hide_meal(id):
 
     return redirect(url_for('admin.edit_restaurant', id=rest_id))
 
+@bp.route('/recover_meal/<int:id>/', methods=['POST'])
+@admin_required
+def recover_meal(id):
+    Meal.recover(id)
+    rest_id = request.form['rest_id']
+
+    return redirect(url_for('admin.edit_restaurant', id=rest_id))
+
 @bp.route("/bill", methods=('GET', 'POST'))
 @admin_required
 def check_bill():
