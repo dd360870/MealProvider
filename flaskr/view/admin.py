@@ -4,6 +4,7 @@ from flask import (
 
 from flaskr.view.auth import admin_required, login_required
 from flaskr.model import Restaurant, Order, User, Meal
+from flaskr.db import db
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -17,23 +18,34 @@ def index():
 @bp.route('/edit_restaurant/<int:id>/', methods=('GET', 'POST'))
 @admin_required
 def edit_restaurant(id):
+    if request.method == 'GET':
+        sort_by = request.args.get('sort_by', None)
+        restaurant = Restaurant.getById(id)
+        meals = restaurant.meals
+        if sort_by == 'stars':
+            meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
+        elif sort_by == 'price':
+            meals.sort(key=lambda x: x.price)
+        elif sort_by == 'sales':
+            meals.sort(key=lambda x: x.sales, reverse=True)
+        return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
+    elif request.method == 'POST':
+        new_name = request.form['restaurant_name']
+        new_tag = request.form['restaurant_tag']
+        Restaurant.update(id, new_name, new_tag)
 
-    sort_by = request.args.get('sort_by', None)
-    restaurant = Restaurant.getById(id)
-    meals = restaurant.meals
-    if sort_by == 'stars':
-        meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
-    elif sort_by == 'price':
-        meals.sort(key=lambda x: x.price)
-    elif sort_by == 'sales':
-        meals.sort(key=lambda x: x.sales, reverse=True)
-    return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
+        return redirect(url_for('admin.edit_restaurant', id=id))
 
-@bp.route('/edit_restaurant/<int:id>/', methods=('GET', 'POST'))
+@bp.route('/edit_meal/<int:id>/', methods=['POST'])
 @admin_required
-def edit_restaurant_name_and_tag(id):
+def edit_meal(id):
+    new_name = request.form['meal_name']
+    new_price = request.form['meal_price']
+    new_description = request.form['meal_description']
+    rest_id = request.form['rest_id']
+    Meal.update(id, new_name, new_description, new_price)
 
-    return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=meals, sort_by=sort_by)
+    return redirect(url_for('admin.edit_restaurant', id=rest_id))
 
 
 @bp.route("/bill", methods=('GET', 'POST'))

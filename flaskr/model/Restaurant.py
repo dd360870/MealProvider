@@ -1,6 +1,13 @@
 from flaskr.db import db, Restaurant, Meal, MealReview, OrderItem
 from sqlalchemy.sql import func
 
+def update(id, name, tag):
+    restaurant = Restaurant.query.get(id) 
+        
+    restaurant.name = name
+    restaurant.tag = tag
+    db.session.commit()
+
 def getAll():
     query = db.select(Restaurant).where(Restaurant.is_available == 1)
     restaurants = db.session.execute(query).scalars().all()

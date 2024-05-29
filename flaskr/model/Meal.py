@@ -1,5 +1,15 @@
 from flaskr.db import db, Meal
 
+
+def update(id, name, description, price):
+    meal = Meal.query.get(id)
+
+    meal.name = name
+    meal.description = description
+    meal.price = price
+
+    db.session.commit()
+
 def get_price_by_id(id) -> int|None :
     query = db.select(Meal).where(Meal.id == id)
     meal = db.session.execute(query).scalar_one_or_none()

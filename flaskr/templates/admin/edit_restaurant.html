@@ -46,13 +46,13 @@
 
   <div class="card mb-4">
     <div class="card-body">
-      <div>
+      <form  method="POST" action="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}">
         <button type="button" class="btn-close" aria-label="Close" style="float:right;"></button>
         <div class="input-group input-group-lg mb-3" style="width: 80%;">
           <span class="input-group-text" id="inputGroup-sizing-default">店名</span>
-          <input type="text" class="form-control" aria-label="Text input with dropdown button" id="restaurant_name" value={{ restaurant.name }}>
+          <input type="text" class="form-control" aria-label="Text input with dropdown button" id="restaurant_name" name="restaurant_name" value={{ restaurant.name }}>
           <span class="input-group-text" id="inputGroup-sizing-default">種類</span>
-          <select class="form-select" id="inputGroupSelect01">
+          <select class="form-select" id="inputGroupSelect01" name="restaurant_tag">
             <option selected value="{{ restaurant.tag }}">{{ restaurant.tag }}</option>
             {% if restaurant.tag != "中式" %}
             <option value="中式">中式</option>
@@ -70,9 +70,9 @@
             <option value="甜點">甜點</option>
             {% endif %}
           </select>
-          <button type="button" href="#" class="btn btn-primary">確認</button>
+          <button type="submit" class="btn btn-primary">確認</button>
         </div>
-      </div>
+      </form>
 
     </div>
   </div>
@@ -83,17 +83,18 @@
     </div>
   {% if meals %}
       {% for meal in meals %}
-        <div class="list-group-item">
+        <form class="list-group-item" method="POST" action="{{ url_for('admin.edit_meal', id=meal.id)}}">
+          <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
           <button type="button" class="btn-close" aria-label="Close" style="float:right" ></button>
           <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
             <span class="input-group-text" id="inputGroup-sizing-default">名稱</span>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.name }} >
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.name }} name="meal_name">
             <span class="input-group-text"><i class="fa-solid fa-dollar-sign i"></i></span>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.price }} >
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.price }} name="meal_price">
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">描述</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.description }} >
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.description }} name="meal_description">
           </div>
           <small class="text-muted">
             <i class="fa fa-star i"></i>
@@ -103,7 +104,7 @@
               尚未有評價
             {% endif %}
             | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
-            <button type="button" style="float:right; margin-right: 20%;"
+            <button type="submit" style="float:right; margin-right: 20%;"
             href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}" class="btn btn-primary">確認</button>
           </small>
           <!-- <button type="button" style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
@@ -111,7 +112,7 @@
           
           
 
-        </div>
+          </form>
       {% endfor %}
     
   {% else %}
