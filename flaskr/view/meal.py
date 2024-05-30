@@ -15,6 +15,17 @@ def index(id):
 @bp.route('/writeReview/<int:id>/', methods=('GET', 'POST'))
 def writeReview(id):
     if request.method == 'POST':
-        start
+        user_id = g.user.id
+        meal_id = id
+        stars = request.form["rating"]
+        content = request.form["content"]
+        error = None
+
+        if error is None:
+            Meal.newReview(user_id, meal_id, stars, content)
+        else:
+            flash(error)
+
+        return redirect( url_for('meal.index', id=id) )
     meal = Meal.getById(id)
     return render_template("meal/writeReview.html", meal=meal)
