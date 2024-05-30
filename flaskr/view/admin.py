@@ -13,7 +13,8 @@ bp = Blueprint('admin', __name__, url_prefix='/admin')
 def index():
     selected_tags = request.args.getlist('tag')
     restaurants = Restaurant.getByTags(selected_tags)
-    return render_template('admin/index.html', restaurants=restaurants, edit=None)
+    unavailable_restaurants = Restaurant.getByTagsUnavailable(selected_tags)
+    return render_template('admin/index.html', restaurants=restaurants, unavailable_restaurants=unavailable_restaurants, edit=None)
 
 @bp.route('/edit_restaurant/<int:id>/', methods=('GET', 'POST'))
 @admin_required
@@ -44,7 +45,8 @@ def edit_restaurant(id):
 def hide_restaurant(id):
     Restaurant.hide(id)
     restaurants = Restaurant.getAll()
-    return render_template('admin/index.html', restaurants=restaurants, edit=None)
+    unavailable_restaurants = Restaurant.getAllUnavailable()
+    return render_template('admin/index.html', restaurants=restaurants, unavailable_restaurants=unavailable_restaurants, edit=None)
 
 @bp.route('/add_restaurant/', methods=['GET','POST'])
 @admin_required
@@ -52,6 +54,15 @@ def add_restaurant():
     restaurant_id = Restaurant.add()
     restaurant = Restaurant.getById(restaurant_id)
     return render_template("admin/edit_restaurant.html", restaurant=restaurant, meals=None, sort_by=None)
+
+@bp.route('/recover_restaurant/<int:id>/', methods=['POST'])
+@admin_required
+def recover_restaurant(id):
+    print(id)
+    Restaurant.recover(id)
+    restaurants = Restaurant.getAll()
+    unavailable_restaurants = Restaurant.getAllUnavailable()
+    return render_template('admin/index.html', restaurants=restaurants, unavailable_restaurants=unavailable_restaurants, edit=None)
 
 @bp.route('/edit_meal/<int:id>/', methods=['POST'])
 @admin_required
