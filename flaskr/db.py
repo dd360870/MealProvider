@@ -34,6 +34,7 @@ class Restaurant(db.Model):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str] = mapped_column(String(1024), nullable=True)
     tag: Mapped[str] = mapped_column(String(128), nullable=True)
+    is_available: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
     meals = relationship("Meal", backref="restaurant")
 
@@ -45,6 +46,7 @@ class Meal(db.Model):
     description: Mapped[str] = mapped_column(String(1024), nullable=True)
     price: Mapped[str] = mapped_column(Integer, nullable=False)
     restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"), nullable=False)
+    is_available: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
     reviews: Mapped[Optional["MealReview"]] = relationship(back_populates="meal")
 

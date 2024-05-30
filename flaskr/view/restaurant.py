@@ -11,6 +11,8 @@ bp = Blueprint('restaurant', __name__, url_prefix='/restaurant')
 def index(id):
     sort_by = request.args.get('sort_by', None)
     restaurant = Restaurant.getById(id)
+    if restaurant.is_available == 0:
+        return redirect(url_for("home.index"))
     meals = restaurant.meals
     if sort_by == 'stars':
         meals.sort(key=lambda x: x.average_stars if x.average_stars else 0, reverse=True)
