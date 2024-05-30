@@ -7,15 +7,16 @@ dependencies = [
     "mariadb",
     "flask-sqlalchemy",
     "gunicorn",
+    "celery",
+    "redis",
+    "Flask-Mail",
 ]
 
-[build-system]
-requires = ["flit_core<4"]
-build-backend = "flit_core.buildapi"
+[project.optional-dependencies] # Optional
+dev = [
+    "watchdog",
+    "flower",
+]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-
-[tool.coverage.run]
-branch = true
-source = ["flaskr"]
+[tool.setuptools]
+py-modules = []

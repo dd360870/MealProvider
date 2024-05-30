@@ -16,13 +16,15 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip3 install -e .",
+	//"postCreateCommand": "pip3 install -e .",
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"wholroyd.jinja",
 				"ms-azuretools.vscode-docker",
-				"njpwerner.autodocstring"
+				"njpwerner.autodocstring",
+				"mhutchie.git-graph",
+				"eamodio.gitlens"
 			]
 		}
 	},

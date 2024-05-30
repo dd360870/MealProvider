@@ -30,3 +30,6 @@
 
 * 重置資料庫 (如果db欄位有更動的話，要重新建立)
     `flask db init`
+
+* 監控 celery task
+    `celery -A make_celery flower --port=5555`

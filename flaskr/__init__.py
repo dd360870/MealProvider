@@ -4,6 +4,40 @@ from os import environ
 from flask import Flask, current_app
 from flaskr.commands import register_cli
 
+from celery import Celery, Task
+from celery.schedules import crontab
+from flask_mail import Mail, Message
+
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi']
+    }
+})
+
+def celery_init_app(app: Flask) -> Celery:
+    class FlaskTask(Task):
+        def __call__(self, *args: object, **kwargs: object) -> object:
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery_app = Celery(app.name, task_cls=FlaskTask)
+    celery_app.config_from_object(app.config["CELERY"])
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
+    return celery_app
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -24,10 +58,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    DEBUG = environ.get('DEBUG')
     DB_HOST = environ.get('DB_HOST')
 
-    app.config["DEBUG"] = (DEBUG == '1')
     app.config["DB_HOST"] = DB_HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mariadb+mariadbconnector://nol:nol@{DB_HOST}:3306/meal_provider"
     app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
@@ -35,6 +67,37 @@ def create_app(test_config=None):
             'connect_timeout': 10
         }
     }
+
+    # Initialize Celery
+    app.config.from_mapping(
+        CELERY=dict(
+            broker_url="redis://redis",
+            result_backend="redis://redis",
+            task_ignore_result=True,
+            broker_connection_retry_on_startup=True,
+            beat_schedule = {
+                'add-every-monday-morning': {
+                    'task': 'flaskr.tasks.save_bill',
+                    'schedule': crontab(hour=7, minute=30, day_of_month=1),
+                    'args': (),
+                },
+            },
+        ),
+    )
+    app.config.from_prefixed_env()
+    celery_init_app(app)
+
+    # Initialize SMTP
+    app.config['MAIL_SERVER'] = 'smtp.mailgun.org'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_USERNAME'] = 'postmaster@sandbox357a7d541f9a4f87b3bbe8af5013ced2.mailgun.org'
+    app.config['MAIL_PASSWORD'] = 'e75ee2616c18101cdc5a00b3af5e33de-0996409b-881c5474'
+    app.config['MAIL_DEFAULT_SENDER'] = 'admin@mealprovider.nollab.me'
+
+    mail = Mail(app)
+    app.extensions["mail"] = mail
 
     # a simple page that says hello
     @app.route('/ping')

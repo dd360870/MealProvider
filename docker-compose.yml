@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    image: ghcr.io/dd360870/mealprovider-web:latest
+    image: ghcr.io/dd360870/mealprovider-app:latest
     ports:
       - 8000:8000
     environment:
@@ -32,5 +32,16 @@ services:
       interval: 1m
       timeout: 10s
       retries: 3
+  redis:
+    image: redis
+  celery:
+    environment:
+      - DB_HOST=db
+    image: ghcr.io/dd360870/mealprovider-app:latest
+    command: celery -A make_celery worker --loglevel INFO
+  celery-beat:
+    image: ghcr.io/dd360870/mealprovider-app:latest
+    command: celery -A make_celery beat --loglevel INFO
+
 volumes:
   database:

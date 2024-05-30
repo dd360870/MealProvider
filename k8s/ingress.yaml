@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: mealprovider-web-ingress
 spec:
+  tls:
+  - hosts:
+      - mealprovider.nollab.me
+    secretName: mealprovider-tls
   rules:
   - host: "mealprovider.nollab.me"
     http:

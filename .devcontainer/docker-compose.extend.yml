@@ -8,3 +8,22 @@ services:
       - ./:/app
     environment:
       - FLASK_APP=flaskr
+      - FLASK_DEBUG=1
+  celery:
+    build:
+      dockerfile: .devcontainer/Dockerfile
+      context: .
+    volumes:
+      - ./:/app
+    environment:
+      - FLASK_APP=flaskr
+    command: watchmedo auto-restart --patterns="*.py" --recursive -- celery -A make_celery worker --pool threads --loglevel DEBUG
+  celery-beat:
+    build:
+      dockerfile: .devcontainer/Dockerfile
+      context: .
+    volumes:
+      - ./:/app
+    environment:
+      - FLASK_APP=flaskr
+    command: watchmedo auto-restart --patterns="*.py" --recursive -- celery -A make_celery beat --loglevel DEBUG
