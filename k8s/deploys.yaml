@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: web-container
-          image: ghcr.io/dd360870/mealprovider-web:latest
+          image: ghcr.io/dd360870/mealprovider-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -33,10 +33,120 @@ spec:
           env:
             - name: DB_HOST
               value: mealprovider-db-clusterip
-            - name: DEBUG
+            - name: REDIS_HOST
+              value: mealprovider-redis-clusterip
+            - name: FLASK_DEBUG
               value: "1"
             - name: FLASK_APP
               value: flaskr
+      imagePullSecrets:
+        - name: ghcr-login-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealprovider-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealprovider-redis
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: mealprovider-redis
+    spec:
+      containers:
+        - name: redis-container
+          image: docker.io/library/redis:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealprovider-celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealprovider-celery
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: mealprovider-celery
+    spec:
+      containers:
+        - name: celery-container
+          image: ghcr.io/dd360870/mealprovider-app:latest
+          env:
+            - name: DB_HOST
+              value: mealprovider-db-clusterip
+            - name: REDIS_HOST
+              value: mealprovider-redis-clusterip
+          command: ["celery"]
+          args: ["-A", "make_celery", "worker", "--loglevel", "INFO", "--concurrency", "2"]
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+      imagePullSecrets:
+        - name: ghcr-login-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealprovider-celery-beat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealprovider-celery-beat
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: mealprovider-celery-beat
+    spec:
+      containers:
+        - name: celery-beat-container
+          image: ghcr.io/dd360870/mealprovider-app:latest
+          command: ["celery"]
+          args: ["-A", "make_celery", "beat", "--loglevel", "INFO"]
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
       imagePullSecrets:
         - name: ghcr-login-secret
 ---
