@@ -48,7 +48,7 @@ class Meal(db.Model):
     restaurant_id = mapped_column(Integer, ForeignKey("restaurant.id"), nullable=False)
     is_available: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    reviews: Mapped[Optional["MealReview"]] = relationship(back_populates="meal")
+    reviews: Mapped[List["MealReview"]] = relationship(back_populates="meal")
 
 class MealReview(db.Model):
     __tablename__ = "meal_review"
@@ -100,4 +100,3 @@ class Bill(db.Model):
     paid_datetime: Mapped[datetime.date] = mapped_column(DateTime, nullable=True, comment="結帳時間")
 
     user: Mapped["User"] = relationship(back_populates="bills")
-

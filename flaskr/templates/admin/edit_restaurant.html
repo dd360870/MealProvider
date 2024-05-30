@@ -1,0 +1,197 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+<style>
+  .list-group-item {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+  }
+  .i {
+    color: #FFC107;
+  }
+  .form-check-input {
+    vertical-align: middle;
+  }
+  .form-check-label {
+    display: inline-block; 
+    vertical-align: middle;
+    margin-bottom: 0;
+  }
+</style>
+
+<div class="container mt-4">
+  <h1 class="text-center">{{ restaurant.name }}</h1><br>
+  <form action="" method="get" class="mb-4">
+    <div class="form-group">
+      <label class="me-2">排序依據：</label>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_stars" name="sort_by" value="stars" class="form-check-input" {% if sort_by == 'stars' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_stars">評價星等</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_price" name="sort_by" value="price" class="form-check-input" {% if sort_by == 'price' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_price">價格低至高</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_sales" name="sort_by" value="sales" class="form-check-input" {% if sort_by == 'sales' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_sales">銷售數量</label>
+      </div>
+    </div>
+  </form>
+
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('admin.hide_restaurant', id=restaurant.id)}}">
+        <button type="submit" class="btn-close" aria-label="Close" style="float:right"></button>
+      </form>
+      <form  method="POST" action="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}">
+        <div class="input-group input-group-lg mb-3" style="width: 80%;">
+          <span class="input-group-text" id="inputGroup-sizing-default">店名</span>
+          <input type="text" class="form-control" aria-label="Text input with dropdown button" id="restaurant_name" name="restaurant_name" value={{ restaurant.name }}>
+          <span class="input-group-text" id="inputGroup-sizing-default">種類</span>
+          <select class="form-select" id="inputGroupSelect01" name="restaurant_tag">
+            <option selected value="{{ restaurant.tag }}">{{ restaurant.tag }}</option>
+            {% if restaurant.tag != "中式" %}
+            <option value="中式">中式</option>
+            {% endif %}
+            {% if restaurant.tag != "西式" %}
+            <option value="西式">西式</option>
+            {% endif %}
+            {% if restaurant.tag != "日式" %}
+            <option value="日式">日式</option>
+            {% endif %}
+            {% if restaurant.tag != "飲料" %}
+            <option value="飲料">飲料</option>
+            {% endif %}
+            {% if restaurant.tag != "甜點" %}
+            <option value="甜點">甜點</option>
+            {% endif %}
+          </select>
+          <button type="submit" class="btn btn-primary">確認</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="list-group"  id="meal-list">
+    <form class="list-group-item" style="display: flex; justify-content: center; align-items: center;">
+      <button type="button" href="#" class="btn btn-success">新增餐點 +_+</button>
+    </form>
+  {% if meals %}
+      {% for meal in meals %}
+      <div class="list-group-item" >
+        <form method="POST" action="{{ url_for('admin.hide_meal', id=meal.id)}}">
+          <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
+          <button type="submit" class="btn-close" aria-label="Close" style="float:right"></button>
+        </form>
+        <form method="POST" action="{{ url_for('admin.edit_meal', id=meal.id)}}">
+          <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
+          <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
+            <span class="input-group-text" id="inputGroup-sizing-default">名稱</span>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.name }} name="meal_name">
+            <span class="input-group-text"><i class="fa-solid fa-dollar-sign i"></i></span>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.price }} name="meal_price">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">描述</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={{ meal.description }} name="meal_description">
+          </div>
+          <small class="text-muted">
+            <i class="fa fa-star i"></i>
+            {% if meal.average_stars is not none %}
+              {{ meal.average_stars|round(1) }}
+            {% else %}
+              尚未有評價
+            {% endif %}
+            | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
+            <button type="submit" style="float:right; margin-right: 20%;"
+             class="btn btn-primary">確認</button>
+          </small>
+          <!-- <button type="button" style="float: right;" href="{{ url_for('admin.edit_restaurant', id=restaurant.id) }}"
+            class="btn btn-secondary">取消</button> -->
+          
+          </form>
+        </div>
+      {% endfor %}
+    
+  {% else %}
+    <p class="text-center"><br>No meals available</p>
+  {% endif %}
+  </div>
+
+  <br><hr><h5 class="text-center">Unavailable meals</h5>
+  <div class="list-group"  id="meal-list">
+  {% if restaurant.unavailable_meals %}
+      {% for meal in restaurant.unavailable_meals %}
+      <div class="list-group-item">
+        <h4 class="mb-1">{{ meal.name }}</h5>
+        <p class="mb-1">{{ meal.description }}</p>
+        <form method="POST" action="{{ url_for('admin.recover_meal', id=meal.id)}}">
+          <small class="text-muted">
+            <i class="fa-solid fa-dollar-sign i"></i> {{ meal.price }} |
+            <i class="fa fa-star i"></i>
+            {% if meal.average_stars is not none %}
+              {{ meal.average_stars|round(1) }} ({{ meal.review_count }})
+            {% else %}
+              尚未有評價
+            {% endif %}
+            | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('meal.index', id=meal.id) }}">查看評論</a>
+              <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
+              <button type="submit" style="float:right; margin-right: 20%;" class="btn btn-info">復原餐點</button>
+          </small>
+        </form>
+      </div>
+      {% endfor %}
+    
+  {% else %}
+    <p class="text-center"><br>No meals unavailable</p>
+  {% endif %}
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const addMealButton = document.querySelector('.btn-success');
+    const mealList = document.getElementById('meal-list');
+
+    addMealButton.addEventListener('click', () => {
+      const newMealItem = document.createElement('div');
+      newMealItem.classList.add('list-group-item');
+
+      const newMealForm = `
+        <form method="POST" action="{{ url_for('admin.add_meal', restaurant_id=restaurant.id) }}">  
+          <button type="button" class="btn-close" aria-label="Close" style="float:right"></button>
+          <div class="input-group mb-3" style="width: 80%; margin-top: 0%">
+            <span class="input-group-text">名稱</span>
+            <input class="form-control" aria-label="Sizing example input" name="meal_name">
+            <span class="input-group-text"><i class="fa-solid fa-dollar-sign i"></i></span>
+            <input class="form-control" aria-label="Sizing example input" name="meal_price">
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">描述</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" name="meal_description">
+          </div>
+          <small class="text-muted">
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            <i class="fa fa-star i"></i>
+            新餐點
+          </small>
+          <button type="submit" style="float:right; margin-right: 20%;" class="btn btn-success">新增</button>
+        </form>
+      `;
+
+      newMealItem.innerHTML = newMealForm;
+      mealList.insertBefore(newMealItem, addMealButton.parentElement); // Add before the "+" button
+      addMealButton.parentElement.style.display = 'none'; 
+    });
+  });
+</script>
+{% endblock %}
