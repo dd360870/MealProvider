@@ -3,7 +3,7 @@
 {% block content %}
   <style>
     .textarea-large {
-      width: 50%; /* Make the textarea full-width */
+      width: 70%; /* Make the textarea full-width */
       height: 100px; /* Set the height of the textarea */
       padding: 10px; /* Add some padding inside the textarea */
       font-size: 16px; /* Set a comfortable font size */
@@ -34,7 +34,7 @@
       float: left;
       position: relative;
       top: 10%;
-      left: 41%;
+      left: 35%;
     }
     
     .rating > label {
@@ -71,7 +71,7 @@
   <br>
   <center><h1>{{ meal.name }}</h1>
     <br>
-    <form method="post">
+    <form method="post" class="m-auto border border-dark-subtle rounded p-3" style="max-width:50rem">
     <p>評分</p>
     <div class="rating">
       <input type="radio" id="star5" name="rating" value="5" />
@@ -89,11 +89,11 @@
     <p>評論</p>
     <textarea id="userInput" class="textarea-large" name="content" placeholder="詳細說明您的意見"></textarea>
     <br>
-    <button type="submit" class="submit-button" onclick="displayRadioValue()">提交</button>
+    <button type="submit" class="submit-button">提交</button>
     </form>
     <p id="result"></p>
     </center>
-    <script>
+    <!-- <script>
       function displayRadioValue() {
           var ele = document.getElementsByName('rating');
           var result;
@@ -102,5 +102,5 @@
                 result = ele[i].value;
           }
       }
-    </script>
+    </script> -->
 {% endblock %}

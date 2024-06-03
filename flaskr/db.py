@@ -54,6 +54,7 @@ class MealReview(db.Model):
     stars: Mapped[int] = mapped_column(SmallInteger, nullable=False)
     meal_id = mapped_column(Integer, ForeignKey("meal.id"), nullable=False)
     user_id = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
+    timestamp: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
 
 class Order(db.Model):
     __tablename__ = "order"
