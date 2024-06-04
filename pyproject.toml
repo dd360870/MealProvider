@@ -16,6 +16,11 @@ dependencies = [
 dev = [
     "watchdog",
     "flower",
+    "pytest",
+    "pytest-cov",
+    "pytest-flask",
+    "pytest-mock",
+    "coverage",
 ]
 
 [tool.setuptools]
@@ -23,6 +28,7 @@ py-modules = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.coverage.run]
 branch = true
