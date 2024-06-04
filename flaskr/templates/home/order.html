@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}點餐紀錄{% endblock %}
 {% block content %}
+<br>
 <div class="row">
   <form class="col mt-3 d-md-none">
     <select class="form-select" name="datestr" onchange="this.form.submit()">
@@ -37,8 +38,10 @@
       <tbody>
     {% for item in o.items %}
         <tr>
-          <td>{{ item.meal.name }} | <a href="{{ url_for('meal.writeReview', id=item.meal.id) }}">撰寫評論</a></td>
-          <td class="text-end">{{ item.price }}</td>
+          <form method="get">
+            <td>{{ item.meal.name }} | <a href="{{ url_for('meal.writeReview', id=item.meal.id) }}">撰寫評論</a></td>
+          </form>
+            <td class="text-end">{{ item.price }}</td>
           <td class="text-end">{{ item.count }}</td>
           <td class="text-end">{{ item.count * item.price }}</td>
         </tr>

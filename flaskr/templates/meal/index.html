@@ -18,8 +18,9 @@
   <div class="list-group">
   {% for review in reviews %}
     <div class="list-group-item">
-    <p>{{ review.stars }} <i class="fa fa-star"></i></p>
-    <p>{{ review.content }}</p>
+      {{review.timestamp.strftime('%Y-%m-%d')}} |
+      <i class="fa fa-star"></i> {{review.stars}}
+      <p class="mb-1">{{ review.content }}</p>
     </div>
   {% endfor %}
   </div>

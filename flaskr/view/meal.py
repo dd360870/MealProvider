@@ -3,7 +3,7 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from flaskr.model import Meal
+from flaskr.model import Meal, Review
 
 bp = Blueprint('meal', __name__, url_prefix='/meal')
 
@@ -22,10 +22,17 @@ def writeReview(id):
         error = None
 
         if error is None:
-            Meal.newReview(user_id, meal_id, stars, content)
+            Review.newReview(user_id, meal_id, stars, content)
         else:
             flash(error)
 
         return redirect( url_for('meal.index', id=id) )
-    meal = Meal.getById(id)
-    return render_template("meal/writeReview.html", meal=meal)
+    elif request.method == 'GET':
+        if Review.get_comment_by_meal_id_and_user_id(id, g.user.id):
+            
+            return redirect( url_for('home.orders') )
+        else:
+            meal = Meal.getById(id)
+            return render_template("meal/writeReview.html", meal=meal)
+    # meal = Meal.getById(id)
+    # return render_template("meal/writeReview.html", meal=meal)

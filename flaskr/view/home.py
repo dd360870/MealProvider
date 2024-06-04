@@ -5,7 +5,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from flaskr.model import Restaurant, Order
+from flaskr.model import Restaurant, Order, Review
 from flaskr.view.auth import login_required
 
 bp = Blueprint('home', __name__)
@@ -34,6 +34,7 @@ def orders(datestr=None):
 
     orders = Order.getHistory(g.user.id, arg_year, arg_month)
     months = Order.getGroupByMonth(g.user.id)
+    # isComment = Review.get_comment_by_meal_id_and_user_id(g.user.id, )
 
     context = {
         'orders': orders,
