@@ -90,3 +90,15 @@ def admin_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+def clerk_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        if not g.user.is_clerk:
+            return redirect(url_for('index'))
+
+        return view(**kwargs)
+
+    return wrapped_view

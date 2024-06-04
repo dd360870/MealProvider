@@ -31,6 +31,8 @@
           <span class="navbar-text mx-2">{{ g.user['username'] }}</span>
   {% if g.user and g.user.is_admin %}
           <a class="btn btn-primary mx-2" href="{{ url_for('admin.index') }}">管理頁面</a>
+  {% elif g.user and g.user.is_clerk %}
+          <a class="btn btn-info mx-2" href="{{ url_for('clerk.index', id=g.user.restaurant_id) }}">POS介面</a>
   {% endif %}
           <a class="btn btn-secondary" href="{{ url_for('auth.logout') }}">登出</a>
 {% else %}

@@ -76,8 +76,14 @@ def create_order_items(order_id, order_details) -> None:
         db.session.add(new_order_item)
     db.session.commit()
 
-def getAll() -> None:
-    query = db.select(Order)
+def getAll():
+    query = (db.select(Order)
+             .options(db.selectinload(Order.items)))
+    return db.session.execute(query).scalars()
+
+def get_restaurant_order(id):
+    query = (db.select(Order)
+             .where(Order.restaurant_id==id))
     return db.session.execute(query).scalars()
 
 def delete_orders(order_list) -> None:
