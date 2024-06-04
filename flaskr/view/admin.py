@@ -25,6 +25,4 @@ def check_bill():
         if user_id not in user_bill_data:
             user_bill_data[user_id] = []
         user_bill_data[user_id].append((int(price), year, month))
-    print(user_id_to_name)
-    print(user_bill_data)
     return render_template('admin/bill.html', user_bill_data = user_bill_data, user_id_to_name=user_id_to_name)

@@ -3,11 +3,62 @@
 {% block title %}Clerk{% endblock %}
 
 {% block content %}
-  <h1>{{ restaurant.name }}</h1>
-  {% for meal in meals %}
-    <p>{{ meal.name }} | {{ meal.description }} | {{ meal.price }}</p>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+
+<style>
+  .list-group-item {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+  }
+  .i {
+    color: #FFC107;
+  }
+</style>
+
+<div class="container mt-4">
+  <h1 class="text-center">{{ restaurant.name }}</h1><br>
+  <form action="" method="get" class="mb-4">
+    <div class="form-group">
+      <label class="me-2">排序依據：</label>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_stars" name="sort_by" value="stars" class="form-check-input" {% if sort_by == 'stars' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_stars">評價星等</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_price" name="sort_by" value="price" class="form-check-input" {% if sort_by == 'price' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_price">價格低至高</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" id="sort_by_sales" name="sort_by" value="sales" class="form-check-input" {% if sort_by == 'sales' %}checked{% endif %} onchange="this.form.submit()">
+        <label class="form-check-label" for="sort_by_sales">銷售數量</label>
+      </div>
+    </div>
+  </form>
+
+  {% if meals %}
+    <div class="list-group">
+      {% for meal in meals %}
+        <div class="list-group-item">
+          <h4 class="mb-1">{{ meal.name }}</h5>
+          <p class="mb-1">{{ meal.description }}</p>
+          <small class="text-muted">
+            <i class="fa-solid fa-dollar-sign i"></i> {{ meal.price }} |
+            <i class="fa fa-star i"></i>
+            {% if meal.average_stars is not none %}
+              {{ meal.average_stars|round(1) }}
+            {% else %}
+              尚未有評價
+            {% endif %}
+            | 銷售數量：{{ meal.sales }} | <a href="{{ url_for('clerk.review', id=meal.id) }}">查看評論</a>
+          </small>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center">No meals available</p>
+  {% endif %}
+</div>
 {% endblock %}
+

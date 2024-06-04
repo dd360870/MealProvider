@@ -4,15 +4,32 @@
 
 {% block content %}
   <h1>取消訂單</h1>
-  <div style="height: 300px; overflow-y: auto;">
-    <form action="{{ url_for('clerk.cancel_orders') }}" method="post">
-        {% for order in orders %}
-            <label>
-                <input type="checkbox" name="cancel_orders[]" value="{{ order.id }}">
-                Order{{order.id}} | user ID: {{ order.user_id }} | {{ order.total_price }} 元
+{% if orders %}
+        <form action="{{ url_for('clerk.cancel_orders') }}" method="post">
+        <div class="list-group" style="height: 700px; overflow-y: auto;">
+      {% for order in orders | reverse %}
+        <div class="list-group-item" style="display: flex;align-items: center;">
+            <div style="display: flex;align-items: center;margin-right: 10px;">
+                <input type="checkbox" style="height: 20px; width: 20px; margin-bottom: 10px;" name="cancel_orders[]" value="{{ order.id }}">
+            </div>
+                <label>    
+                訂單編號: {{order.id}} | 訂購人: {{ user_id_to_name[order.user_id] }}
+                <br>
+                總價 {{ order.total_price }} 元 ||
+                <small class="text-muted">
+                    {% for item in order.items %}
+                        {{ item.meal.name }} {{item.count}} |
+                    {% endfor %}
+                </small>
             </label><br>
-        {% endfor %}
-        <button class="btn btn-danger mx-2" type="submit">刪除</button>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="btn btn-danger mx-2" type="submit">刪除</button>
     </form>
+  {% else %}
+    <p class="text-center">No orders available</p>
+  {% endif %}
 </div>
+
 {% endblock %}
