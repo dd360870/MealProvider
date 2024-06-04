@@ -39,6 +39,14 @@ spec:
               value: "1"
             - name: FLASK_APP
               value: flaskr
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8000
+            initialDelaySeconds: 10
+            failureThreshold: 1
+            periodSeconds: 60
+            terminationGracePeriodSeconds: 60
       imagePullSecrets:
         - name: ghcr-login-secret
 ---
@@ -194,6 +202,17 @@ spec:
               value: meal_provider
             - name: TZ
               value: Asia/Taipei
+          livenessProbe:
+            exec:
+              command:
+              - bash
+              - -c
+              - healthcheck.sh --su-mysql --connect --innodb_initialized
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 60
+            terminationGracePeriodSeconds: 60
+
       volumes:
         - name: mariadb-persistent-storage
           persistentVolumeClaim:
