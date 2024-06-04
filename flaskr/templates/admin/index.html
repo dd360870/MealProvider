@@ -97,4 +97,43 @@
   </div>
   
 </div>
+
+<br><hr><h5 class="text-center">Unavailable restaurants</h5><br>
+
+<div class="row row-cols-1 row-cols-md-3">
+  {% for restaurant in unavailable_restaurants %}
+  <div class="card mb-4 border-0">
+    <div class="card mx-2">
+      <div class="card-body row align-items-center">
+        <div class="content" style="width: 70%;">
+          <div>
+            <h2 class="d-inline">{{ restaurant.name }}</h2>
+            <span class="badge badge bg-light text-dark ms-2">{{ restaurant.tag }}</span>
+          </div>
+          <div class="d-flex align-items-center mt-2">
+            <form method="POST" action="{{ url_for('admin.recover_restaurant', id=restaurant.id) }}">
+              <input type="hidden" name="rest_id" value="{{ restaurant.id }}" />
+              <button type="submit" class="btn btn-info">復原</button>
+            </form>
+            <span class="mx-2"></span>
+            <i class="fa fa-star i"></i>
+            <span class="mx-1"></span>
+            {% if restaurant.average_stars is not none %}
+            {{ restaurant.average_stars|round(1) }} ({{ restaurant.review_count }})
+            {% else %}
+            尚未有評價
+            {% endif %}
+          </div>
+        </div>
+        <div class="d-flex justify-content-end" style="width: 30%;">
+          <img src="https://maughons.com/cdn/shop/products/retro-restaurant-menu-board-wallpaper-mural-custom-sizes-available-maughons-307936_1024x1024.jpg?v=1632422765" width="100%" height="100%" style="border-radius: 8px;">
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p class="text-center">No restaurants unavailable</p>
+  {% endfor %}
+</div>
+
 {% endblock %}

@@ -2,7 +2,6 @@ from flaskr.db import db, Restaurant, Meal, MealReview, OrderItem
 from sqlalchemy.sql import func
 
 def add():
-
     new_restaurant = Restaurant(
         name='新餐廳',
         description=None,
@@ -21,6 +20,13 @@ def hide(id):
 
     db.session.commit()
 
+def recover(id):
+    restaurant = Restaurant.query.get(id)
+
+    restaurant.is_available=True
+
+    db.session.commit()
+
 def update(id, name, tag):
     restaurant = Restaurant.query.get(id)
 
@@ -30,6 +36,14 @@ def update(id, name, tag):
 
 def getAll():
     query = db.select(Restaurant).where(Restaurant.is_available == 1)
+    restaurants = db.session.execute(query).scalars().all()
+    if restaurants:
+        for restaurant in restaurants:
+            restaurant.average_stars, restaurant.review_count = restaurant_review_stars_count(restaurant)
+    return restaurants
+
+def getAllUnavailable():
+    query = db.select(Restaurant).where(Restaurant.is_available == 0)
     restaurants = db.session.execute(query).scalars().all()
     if restaurants:
         for restaurant in restaurants:
@@ -84,6 +98,16 @@ def getByTags(tags: list[str]):
     if not tags:
         return getAll()
     query = db.select(Restaurant).where((Restaurant.tag.in_(tags)) & (Restaurant.is_available == 1))
+    restaurants = db.session.execute(query).scalars().all()
+    if restaurants:
+        for restaurant in restaurants:
+            restaurant.average_stars, restaurant.review_count = restaurant_review_stars_count(restaurant)
+    return restaurants
+
+def getByTagsUnavailable(tags: list[str]):
+    if not tags:
+        return getAllUnavailable()
+    query = db.select(Restaurant).where((Restaurant.tag.in_(tags)) & (Restaurant.is_available == 0))
     restaurants = db.session.execute(query).scalars().all()
     if restaurants:
         for restaurant in restaurants:
