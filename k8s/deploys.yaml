@@ -192,6 +192,8 @@ spec:
               value: nol
             - name: MARIADB_DATABASE
               value: meal_provider
+            - name: TZ
+              value: Asia/Taipei
       volumes:
         - name: mariadb-persistent-storage
           persistentVolumeClaim:
