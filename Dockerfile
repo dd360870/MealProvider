@@ -23,5 +23,4 @@ RUN pip install -e .
 
 USER nol
 
-#CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0:8000 -w 4 'flaskr:create_app()'" ]
-CMD [ "/bin/bash", "-c", "flask --app flaskr run --host 0.0.0.0 --port 8000" ]
+CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0:8000 -w 1 'flaskr:create_app()'" ]
