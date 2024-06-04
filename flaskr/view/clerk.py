@@ -48,7 +48,6 @@ def confirm_order():
             quantity = int(request.form.get(key))
             if quantity > 0:
                 price = Meal.get_price_by_id(meal_id)
-                price = price*quantity
                 total_price = total_price + price
                 order_details.append({
                     'meal_id': meal_id,
