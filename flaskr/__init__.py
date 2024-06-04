@@ -59,6 +59,7 @@ def create_app(test_config=None):
         pass
 
     DB_HOST = environ.get('DB_HOST')
+    REDIS_HOST = environ.get('REDIS_HOST')
 
     app.config["DB_HOST"] = DB_HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mariadb+mariadbconnector://nol:nol@{DB_HOST}:3306/meal_provider"
@@ -71,8 +72,8 @@ def create_app(test_config=None):
     # Initialize Celery
     app.config.from_mapping(
         CELERY=dict(
-            broker_url="redis://redis",
-            result_backend="redis://redis",
+            broker_url=f"redis://{REDIS_HOST}",
+            result_backend=f"redis://{REDIS_HOST}",
             task_ignore_result=True,
             broker_connection_retry_on_startup=True,
             beat_schedule = {

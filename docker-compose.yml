@@ -6,7 +6,7 @@ services:
       - 8000:8000
     environment:
       - DB_HOST=db
-      - DEBUG=1
+      - REDIS_HOST=redis
       - FLASK_APP=flaskr
   db:
     image: mariadb
@@ -37,6 +37,7 @@ services:
   celery:
     environment:
       - DB_HOST=db
+      - REDIS_HOST=redis
     image: ghcr.io/dd360870/mealprovider-app:latest
     command: celery -A make_celery worker --loglevel INFO
   celery-beat:
