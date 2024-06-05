@@ -61,6 +61,8 @@ def create_app(test_config=None):
 
     DB_HOST = environ.get('DB_HOST')
     REDIS_HOST = environ.get('REDIS_HOST')
+    MAILGUN_USERNAME = environ.get('MAILGUN_USERNAME')
+    MAILGUN_PASSWORD = environ.get('MAILGUN_PASSWORD')
 
     app.config["DB_HOST"] = DB_HOST
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mariadb+mariadbconnector://nol:nol@{DB_HOST}:3306/meal_provider"
@@ -94,8 +96,8 @@ def create_app(test_config=None):
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
-    app.config['MAIL_USERNAME'] = 'postmaster@sandbox357a7d541f9a4f87b3bbe8af5013ced2.mailgun.org'
-    app.config['MAIL_PASSWORD'] = 'e75ee2616c18101cdc5a00b3af5e33de-0996409b-881c5474'
+    app.config['MAIL_USERNAME'] = MAILGUN_USERNAME
+    app.config['MAIL_PASSWORD'] = MAILGUN_PASSWORD
     app.config['MAIL_DEFAULT_SENDER'] = 'admin@mealprovider.nollab.me'
 
     mail = Mail(app)
