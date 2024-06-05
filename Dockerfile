@@ -23,4 +23,4 @@ RUN pip install -e .
 
 USER nol
 
-CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0:8000 -w 1 'flaskr:create_app()'" ]
+CMD [ "/bin/bash", "-c", "gunicorn -b 0.0.0.0:8000 -w 1 --access-logfile - --capture-output --error-logfile - --log-level INFO 'flaskr:create_app()'" ]

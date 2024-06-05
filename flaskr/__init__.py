@@ -23,7 +23,8 @@ dictConfig({
     'root': {
         'level': 'INFO',
         'handlers': ['wsgi']
-    }
+    },
+    "disable_existing_loggers": False,
 })
 
 def celery_init_app(app: Flask) -> Celery:
