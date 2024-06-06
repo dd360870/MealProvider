@@ -39,6 +39,16 @@ spec:
               value: "1"
             - name: FLASK_APP
               value: flaskr
+            - name: MAILGUN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun-secret
+                  key: username
+            - name: MAILGUN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun-secret
+                  key: password
           livenessProbe:
             httpGet:
               path: /ping
@@ -110,6 +120,16 @@ spec:
               value: mealprovider-db-clusterip
             - name: REDIS_HOST
               value: mealprovider-redis-clusterip
+            - name: MAILGUN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun-secret
+                  key: username
+            - name: MAILGUN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mailgun-secret
+                  key: password
           command: ["celery"]
           args: ["-A", "make_celery", "worker", "--loglevel", "INFO", "--concurrency", "2"]
           imagePullPolicy: Always
